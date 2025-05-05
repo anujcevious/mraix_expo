@@ -57,12 +57,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
       {/* Left side */}
       <div className="flex items-center">
         {isMobile ? (
-          <div className="flex items-center">
-            <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
-              M
-            </div>
-            <span className="ml-2 font-semibold text-primarytext">MrAix Expo</span>
-          </div>
+          <span className="font-semibold text-primarytext">MrAix Expo</span>
         ) : (
           <>
             <div className="flex items-center w-[14rem]">
@@ -117,7 +112,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
 
       {/* Right side */}
       <div className="flex items-center space-x-4">
-        {isMobile && (
+        {isMobile ? (
           <Button
             variant="ghost"
             size="icon"
@@ -126,8 +121,9 @@ const Header = ({ onMenuClick }: HeaderProps) => {
           >
             <Menu className="h-5 w-5" />
           </Button>
-        )}
-        {/* Period Selector - desktop only */}
+        ) : (
+          <>
+            {/* Period Selector - desktop only */}
         <div className="hidden md:block">
           <div className="flex items-center border border-gray-200 rounded-lg px-2 py-1 text-sm">
             <span className="text-secondarytext ml-1">Apr 2023</span>
@@ -171,6 +167,8 @@ const Header = ({ onMenuClick }: HeaderProps) => {
             </AvatarFallback>
           </Avatar>
         </Button>
+          </>
+        )}
       </div>
 
       {/* Popups */}
