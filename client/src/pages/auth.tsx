@@ -157,7 +157,7 @@ export default function AuthPage() {
 
       {/* Right Side - Auth Forms */}
       <div className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-md space-y-8">
+        <div className="w-full max-w-md space-y-8 p-8 bg-white rounded-lg shadow-xl">
           {mode === "login" ? (
             <>
               <div className="text-left">
