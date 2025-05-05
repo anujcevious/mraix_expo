@@ -154,33 +154,32 @@ export default function AuthPage() {
         isOpen={showOtpModal}
         onClose={() => setShowOtpModal(false)}
         onVerify={async (otp) => {
-            try {
-              const response = await fetch("/api/auth/verify-otp", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  email: formData.email,
-                  verificationcode: otp,
-                }),
-              });
+          try {
+            const response = await fetch("/api/auth/verify-otp", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: formData.email,
+                verificationcode: otp,
+              }),
+            });
 
-              const data = await response.json();
+            const data = await response.json();
 
-              if (data.status) {
-                setShowOtpModal(false);
-                setLocation("/");
-                toast.success("Email verified successfully!");
-              } else {
-                toast.error(data.message || "OTP verification failed");
-              }
-            } catch (error) {
-              toast.error("OTP verification failed");
+            if (data.status) {
+              setShowOtpModal(false);
+              setLocation("/");
+              toast.success("Email verified successfully!");
+            } else {
+              toast.error(data.message || "OTP verification failed");
             }
-          }}
-        />
-      )}
+          } catch (error) {
+            toast.error("OTP verification failed");
+          }
+        }}
+      />
       <div className="flex min-h-screen">
         <div className="hidden md:flex bg-purple-600 p-6 md:p-16 flex-col justify-center">
           <h1 className="text-4xl font-bold text-white mb-4">
