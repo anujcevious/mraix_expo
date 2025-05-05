@@ -54,11 +54,11 @@ const registerFormSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
 type RegisterFormValues = z.infer<typeof registerFormSchema>;
+import ForgotPasswordPopup from "@/components/popups/ForgotPasswordPopup";
 
 export default function AuthPage() {
-  import ForgotPasswordPopup from "@/components/popups/ForgotPasswordPopup";
-const [mode, setMode] = useState<"login" | "register">("login");
-const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [mode, setMode] = useState<"login" | "register">("login");
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [, setLocation] = useLocation();
   const dispatch = useDispatch();
