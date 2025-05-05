@@ -174,7 +174,9 @@ export default function AuthPage() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs font-normal text-primarytext">Email</FormLabel>
+                        <FormLabel className="text-xs font-normal text-primarytext">
+                          Email
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="email"
@@ -192,7 +194,9 @@ export default function AuthPage() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs font-normal text-primarytext">Password</FormLabel>
+                        <FormLabel className="text-xs font-normal text-primarytext">
+                          Password
+                        </FormLabel>
                         <div className="relative">
                           <FormControl>
                             <Input
@@ -230,11 +234,13 @@ export default function AuthPage() {
                               onCheckedChange={field.onChange}
                             />
                           </FormControl>
-                          <FormLabel className="text-sm">Remember me</FormLabel>
+                          <FormLabel className="text-xs my-auto text-primarytext font-normal">
+                            Remember me
+                          </FormLabel>
                         </FormItem>
                       )}
                     />
-                    <Button variant="link" className="text-primary p-0">
+                    <Button variant="link" className="text-xs text-primary p-0">
                       Forgot Password?
                     </Button>
                   </div>
@@ -254,7 +260,7 @@ export default function AuthPage() {
                 </form>
               </Form>
 
-              <p className="text-center text-sm text-gray-600">
+              <p className="text-center text-xs text-primarytext">
                 Don't have an account?{" "}
                 <button
                   onClick={() => setMode("register")}
@@ -281,7 +287,9 @@ export default function AuthPage() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs font-normal text-primarytext">Name *</FormLabel>
+                          <FormLabel className="text-xs font-normal text-primarytext">
+                            Name *
+                          </FormLabel>
                           <FormControl>
                             <Input placeholder="Enter Name" {...field} />
                           </FormControl>
@@ -295,7 +303,9 @@ export default function AuthPage() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs font-normal text-primarytext">Email *</FormLabel>
+                          <FormLabel className="text-xs font-normal text-primarytext">
+                            Email *
+                          </FormLabel>
                           <FormControl>
                             <Input
                               type="email"
@@ -313,7 +323,9 @@ export default function AuthPage() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs font-normal text-primarytext">Phone *</FormLabel>
+                          <FormLabel className="text-xs font-normal text-primarytext">
+                            Phone *
+                          </FormLabel>
                           <FormControl>
                             <Input placeholder="Enter Phone" {...field} />
                           </FormControl>
@@ -327,7 +339,9 @@ export default function AuthPage() {
                       name="companyName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs font-normal text-primarytext">Company Name *</FormLabel>
+                          <FormLabel className="text-xs font-normal text-primarytext">
+                            Company Name *
+                          </FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Enter Company Name"
@@ -346,7 +360,9 @@ export default function AuthPage() {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs font-normal text-primarytext">Password *</FormLabel>
+                          <FormLabel className="text-xs font-normal text-primarytext">
+                            Password *
+                          </FormLabel>
                           <div className="relative">
                             <FormControl>
                               <Input
@@ -405,7 +421,7 @@ export default function AuthPage() {
                             onCheckedChange={field.onChange}
                           />
                         </FormControl>
-                        <FormLabel className="text-sm">
+                        <FormLabel className="text-xs text-primarytext font-normal">
                           I accept the Terms and Conditions
                         </FormLabel>
                         <FormMessage />
@@ -428,7 +444,7 @@ export default function AuthPage() {
                 </form>
               </Form>
 
-              <p className="text-center text-sm text-gray-600">
+              <p className="text-center text-xs text-primarytext">
                 Already have an account?{" "}
                 <button
                   onClick={() => setMode("login")}
