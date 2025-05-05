@@ -6,7 +6,9 @@ import {
   Search,
   Calendar,
   Building2,
+  Menu,
 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { logout } from "@/lib/slices/authSlice";
