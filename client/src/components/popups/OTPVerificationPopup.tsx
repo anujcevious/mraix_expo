@@ -11,8 +11,9 @@ import {
 
 interface OTPVerificationPopupProps {
   email: string;
+  isOpen: boolean;
   onClose: () => void;
-  onVerified: () => void;
+  onVerify: (otp: string) => Promise<void>;
 }
 
 const OTPVerificationPopup = ({

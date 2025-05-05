@@ -149,12 +149,11 @@ export default function AuthPage() {
         isOpen={showForgotPasswordModal}
         onClose={() => setShowForgotPasswordModal(false)}
       />
-      {showOtpModal && (
-        <OTPVerificationPopup
-          email={formData.email}
-          isOpen={showOtpModal}
-          onClose={() => setShowOtpModal(false)}
-          onVerify={async (otp) => {
+      <OTPVerificationPopup
+        email={formData.email}
+        isOpen={showOtpModal}
+        onClose={() => setShowOtpModal(false)}
+        onVerify={async (otp) => {
             try {
               const response = await fetch("/api/auth/verify-otp", {
                 method: "POST",
