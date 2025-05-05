@@ -145,11 +145,11 @@ export default function AuthPage() {
   return (
     <>
       {isLoading && <LoadingSpinner />}
-      <ForgotPasswordPopup
+      {/* <ForgotPasswordPopup
         isOpen={showForgotPasswordModal}
         onClose={() => setShowForgotPasswordModal(false)}
-      />
-      <OTPVerificationPopup
+      /> */}
+      {/* <OTPVerificationPopup
         email={formData.email}
         isOpen={showOtpModal}
         onClose={() => setShowOtpModal(false)}
@@ -179,7 +179,7 @@ export default function AuthPage() {
             toast.error("OTP verification failed");
           }
         }}
-      />
+      /> */}
       <div className="flex min-h-screen">
         <div className="hidden md:flex bg-purple-600 p-6 md:p-16 flex-col justify-center">
           <h1 className="text-4xl font-bold text-white mb-4">
