@@ -1,10 +1,11 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import { SidebarProvider } from "./context/SidebarContext";
+import { Provider } from "react-redux";
+import { store } from "./lib/store";
 
 createRoot(document.getElementById("root")!).render(
-  <SidebarProvider>
+  <Provider store={store}>
     <App />
-  </SidebarProvider>
+  </Provider>
 );

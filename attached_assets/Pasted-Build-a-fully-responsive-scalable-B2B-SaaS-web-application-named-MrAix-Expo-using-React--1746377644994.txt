@@ -1,0 +1,198 @@
+Build a fully responsive, scalable B2B SaaS web application named **MrAix Expo** using **React**, **Tailwind CSS**, and **Redux Toolkit**. The app should include full authentication flow, collapsible sidebar, header, dashboard, all submenu pages, settings, notification, and user profile popup — styled consistently with theme colors and spacing.
+
+---
+
+📁 Folder Structure:
+- `/components/layout/`: `Header`, `Sidebar`, `Footer`, `ProtectedLayout`
+- `/components/ui/`: `Card`, `Button`, `Tooltip`, `Table`, `Chart`, `Search`
+- `/components/auth/`: `LoginForm`, `RegisterForm`, `OTPVerify`, `ResetPassword`
+- `/components/popups/`: `NotificationPopup`, `UserProfilePopup`, `SettingsPanel`
+- `/pages/`: All menu & submenu pages (see below)
+- `/redux/`: Redux slices and store
+- `/routes/`: Route configuration & protection
+- `/utils/`: Constants, helpers
+- `/assets/`: Icons, logos, dummy images
+
+---
+
+🔐 Auth Pages:
+- Responsive split layout:
+  - **Left side**: Company logo, short info
+  - **Right side**: Login / Register / OTP / Reset forms
+- Complete flow with validations
+
+---
+
+📌 Sidebar Navigation:
+- **Expandable Sidebar**:
+  - Collapsed: Show only icons (tooltip on hover)
+  - Expanded: Show icons + names
+- Toggle via hamburger button
+- **Favorites Section at Top**:
+  - Pin submenu items via icon → Show in top section
+  - If empty, show default message like _“Pin submenu pages for quick access”_
+- Each submenu item has a pin/unpin icon
+
+---
+
+📊 Dashboard Layout:
+- Section 1: **Summary Cards** (Total, Sales, Credit Note, Receipt, Subscriptions, Payment, Debit Note)
+  - Show 4 at a time with horizontal scroll using **next/previous** arrows
+- Section 2: **AI Insight** cards
+- Section 3: **Charts** — Pie, Line, Bar, Square etc.
+- Section 4: Data Table
+
+---
+
+🧠 Menu & Pages:
+Create one page for **each of the following**:
+
+- **Dashboard**
+- **Sales**: Customer, Invoice, Credit Note, Receipt
+- **Purchase**: Vendor, Purchase, Debit Note, Payment
+- **Report**: Trial Balance, Balance Sheet, Report
+- **Collaboration**
+- **Communication**
+
+Each page must include:
+- Page title & breadcrumb
+- Filter section
+- Card/grid if needed
+- Dynamic table with export (Excel, PDF), print, actions
+- Pagination & responsiveness
+
+---
+
+🧩 Header Design (Fixed, Full Width):
+- **Left**:
+  - Rounded circle with **first letter of company** in theme
+  - Company name with select dropdown (width matches sidebar)
+- **Center**: Search bar
+- **Right**:
+  - Period selector
+  - **Settings icon** → Opens full **Settings Page**
+  - **Notification icon** → Opens **popup with themed cards**
+  - **User avatar** → Opens **profile popup** showing name, role, full info
+
+---
+
+⚙️ Settings Page:
+- Opens from header
+- Manages:
+  - Company profile
+  - Theme & branding
+  - Notification preferences
+  - Roles & permissions
+  - API config, integrations
+
+---
+
+🔔 Notification Popup:
+- Themed cards: icon, title, timestamp, description
+- “Mark all as read” and “View all” actions
+
+---
+
+👤 User Profile Popup:
+- Rounded image, full name, role, contact info
+- Option to edit profile
+- Logout button
+
+---
+
+🎨 Tailwind CSS Configuration:
+
+```ts
+// tailwind.config.ts
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      fontSize: {
+        xxs: "0.75rem", // 12px
+        xs: "0.875rem", // 14px
+        sm: "1rem", // 16px
+        base: "1.125rem", // 18px
+        lg: "1.25rem", // 20px
+        xl: "1.5rem", // 24px
+      },
+      fontWeight: {
+        light: "300",
+        normal: "400",
+        medium: "500",
+        semibold: "600",
+        bold: "700",
+      },
+      colors: {
+        "light-bg-color": "#F3E8FF",
+        primary: {
+          DEFAULT: "#6B44EC",
+          dark: "#5936C4",
+          light: "#8665F0",
+        },
+        primarygraycolor: {
+          DEFAULT: "#E1E7EF",
+          dark: "#2563EB",
+          light: "#60A5FA",
+        },
+        secondarygraycolor: {
+          DEFAULT: "#5f6a6a",
+          dark: "#2563EB",
+          light: "#60A5FA",
+        },
+        secondary: {
+          DEFAULT: "#3B82F6",
+          dark: "#2563EB",
+          light: "#60A5FA",
+        },
+        primarytext: {
+          DEFAULT: "#1D1D1E",
+          dark: "#2563EB",
+          light: "#60A5FA",
+        },
+        secondarytext: {
+          DEFAULT: "#5f6a6a",
+          dark: "#2563EB",
+          light: "#60A5FA",
+        },
+        text: {
+          primary: "#000000",
+          secondary: "#4B5563",
+          muted: "#9CA3AF",
+        },
+        gray: {
+          color: "#797d7f",
+        },
+      },
+      borderRadius: {
+        xs: "4px",
+        sm: "6px",
+        md: "8px",
+        lg: "12px",
+        xl: "16px",
+      },
+      boxShadow: {
+        sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        md: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+      },
+      spacing: {
+        xs: "4px",
+        sm: "8px",
+        md: "16px",
+        lg: "24px",
+        xl: "32px",
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;

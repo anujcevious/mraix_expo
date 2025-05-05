@@ -1,638 +1,367 @@
-import React, { useState } from 'react';
-import Breadcrumbs from '@/components/common/Breadcrumbs';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import CardView from '@/components/common/CardView';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import { Link } from 'wouter';
 import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { formatDate, getInitials } from '@/lib/utils';
+  ChevronRight,
+  Users,
+  MessageCircle,
+  Calendar,
+  FileText,
+  CheckCircle,
+  Plus,
+  Search,
+  MoreHorizontal
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useToast } from '@/hooks/use-toast';
 
-interface TeamMember {
-  id: number;
-  name: string;
-  role: string;
-  email: string;
-  avatarColor: string;
-  status: 'active' | 'away' | 'offline';
-}
+// Sample data for projects and team members
+const projects = [
+  {
+    id: 1,
+    name: 'Annual Financial Audit',
+    description: 'Prepare documentation and coordinate with external auditors for annual audit.',
+    progress: 75,
+    dueDate: 'May 30, 2023',
+    members: [
+      { id: 1, name: 'John Doe', avatar: '', initials: 'JD' },
+      { id: 2, name: 'Sarah Johnson', avatar: '', initials: 'SJ' },
+      { id: 3, name: 'Michael Chen', avatar: '', initials: 'MC' }
+    ],
+    tasks: 12,
+    completedTasks: 9
+  },
+  {
+    id: 2,
+    name: 'Tax Compliance Review',
+    description: 'Review tax compliance documentation and prepare for filing deadlines.',
+    progress: 40,
+    dueDate: 'Jun 15, 2023',
+    members: [
+      { id: 2, name: 'Sarah Johnson', avatar: '', initials: 'SJ' },
+      { id: 4, name: 'David Wilson', avatar: '', initials: 'DW' }
+    ],
+    tasks: 8,
+    completedTasks: 3
+  },
+  {
+    id: 3,
+    name: 'Budget Planning 2024',
+    description: 'Develop budget forecasts and financial projections for next fiscal year.',
+    progress: 20,
+    dueDate: 'Jul 10, 2023',
+    members: [
+      { id: 1, name: 'John Doe', avatar: '', initials: 'JD' },
+      { id: 3, name: 'Michael Chen', avatar: '', initials: 'MC' },
+      { id: 4, name: 'David Wilson', avatar: '', initials: 'DW' },
+      { id: 5, name: 'Emily Davis', avatar: '', initials: 'ED' }
+    ],
+    tasks: 15,
+    completedTasks: 3
+  }
+];
 
-interface Project {
-  id: number;
-  name: string;
-  description: string;
-  status: 'in_progress' | 'completed' | 'on_hold';
-  progress: number;
-  dueDate: string;
-  members: number[];
-}
+const teamMembers = [
+  { id: 1, name: 'John Doe', position: 'Financial Director', avatar: '', initials: 'JD', status: 'online' },
+  { id: 2, name: 'Sarah Johnson', position: 'Senior Accountant', avatar: '', initials: 'SJ', status: 'away' },
+  { id: 3, name: 'Michael Chen', position: 'Tax Specialist', avatar: '', initials: 'MC', status: 'online' },
+  { id: 4, name: 'David Wilson', position: 'Financial Analyst', avatar: '', initials: 'DW', status: 'offline' },
+  { id: 5, name: 'Emily Davis', position: 'Accounts Payable', avatar: '', initials: 'ED', status: 'online' }
+];
 
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: 'todo' | 'in_progress' | 'review' | 'completed';
-  priority: 'low' | 'medium' | 'high';
-  dueDate: string;
-  assignee: number | null;
-  project: number;
-}
+// Sample data for recent activities
+const activities = [
+  { 
+    id: 1, 
+    user: { name: 'Sarah Johnson', avatar: '', initials: 'SJ' }, 
+    action: 'commented on', 
+    target: 'Annual Financial Audit', 
+    time: '10 minutes ago', 
+    content: 'I\'ve uploaded the latest balance sheets to the shared folder.'
+  },
+  { 
+    id: 2, 
+    user: { name: 'John Doe', avatar: '', initials: 'JD' }, 
+    action: 'completed task', 
+    target: 'Prepare Q1 financial statements', 
+    time: '1 hour ago',
+    content: null
+  },
+  { 
+    id: 3, 
+    user: { name: 'Michael Chen', avatar: '', initials: 'MC' }, 
+    action: 'created project', 
+    target: 'Tax Compliance Review', 
+    time: '3 hours ago',
+    content: null
+  },
+  { 
+    id: 4, 
+    user: { name: 'Emily Davis', avatar: '', initials: 'ED' }, 
+    action: 'assigned task to', 
+    target: 'David Wilson', 
+    time: 'Yesterday',
+    content: 'Please review the latest vendor invoices by Friday.'
+  }
+];
 
-const Collaboration: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('projects');
+const Collaboration = () => {
+  const { toast } = useToast();
+  const [searchQuery, setSearchQuery] = useState('');
   
-  // Mock data for team members
-  const teamMembers: TeamMember[] = [
-    {
-      id: 1,
-      name: 'John Smith',
-      role: 'Product Manager',
-      email: 'john.smith@example.com',
-      avatarColor: 'bg-primary/10 text-primary',
-      status: 'active'
-    },
-    {
-      id: 2,
-      name: 'Alice Johnson',
-      role: 'UX Designer',
-      email: 'alice.johnson@example.com',
-      avatarColor: 'bg-indigo-100 text-indigo-600',
-      status: 'active'
-    },
-    {
-      id: 3,
-      name: 'Robert Davis',
-      role: 'Frontend Developer',
-      email: 'robert.davis@example.com',
-      avatarColor: 'bg-blue-100 text-blue-600',
-      status: 'away'
-    },
-    {
-      id: 4,
-      name: 'Emily Wilson',
-      role: 'Backend Developer',
-      email: 'emily.wilson@example.com',
-      avatarColor: 'bg-green-100 text-green-600',
-      status: 'offline'
-    },
-    {
-      id: 5,
-      name: 'Michael Brown',
-      role: 'QA Engineer',
-      email: 'michael.brown@example.com',
-      avatarColor: 'bg-orange-100 text-orange-600',
-      status: 'active'
-    }
-  ];
-  
-  // Mock data for projects
-  const projects: Project[] = [
-    {
-      id: 1,
-      name: 'Website Redesign',
-      description: 'Redesigning the company website with updated branding and improved UX',
-      status: 'in_progress',
-      progress: 65,
-      dueDate: '2023-08-15',
-      members: [1, 2, 3]
-    },
-    {
-      id: 2,
-      name: 'Mobile App Development',
-      description: 'Creating a native mobile app for both iOS and Android platforms',
-      status: 'in_progress',
-      progress: 30,
-      dueDate: '2023-09-30',
-      members: [1, 3, 4, 5]
-    },
-    {
-      id: 3,
-      name: 'CRM Integration',
-      description: 'Integrating our systems with the new CRM platform',
-      status: 'on_hold',
-      progress: 15,
-      dueDate: '2023-10-15',
-      members: [1, 4]
-    },
-    {
-      id: 4,
-      name: 'Marketing Campaign',
-      description: 'Q3 digital marketing campaign for new product launch',
-      status: 'completed',
-      progress: 100,
-      dueDate: '2023-06-30',
-      members: [1, 2]
-    }
-  ];
-  
-  // Mock data for tasks
-  const tasks: Task[] = [
-    {
-      id: 1,
-      title: 'Design homepage mockups',
-      description: 'Create mockups for the new homepage design',
-      status: 'completed',
-      priority: 'high',
-      dueDate: '2023-07-10',
-      assignee: 2,
-      project: 1
-    },
-    {
-      id: 2,
-      title: 'Implement authentication system',
-      description: 'Set up user authentication and authorization',
-      status: 'in_progress',
-      priority: 'high',
-      dueDate: '2023-07-20',
-      assignee: 4,
-      project: 2
-    },
-    {
-      id: 3,
-      title: 'Create API documentation',
-      description: 'Document all API endpoints for the mobile app',
-      status: 'todo',
-      priority: 'medium',
-      dueDate: '2023-07-25',
-      assignee: 3,
-      project: 2
-    },
-    {
-      id: 4,
-      title: 'Review UI components',
-      description: 'Review and approve the component library',
-      status: 'review',
-      priority: 'medium',
-      dueDate: '2023-07-18',
-      assignee: 1,
-      project: 1
-    },
-    {
-      id: 5,
-      title: 'Set up analytics',
-      description: 'Implement analytics tracking for the website',
-      status: 'todo',
-      priority: 'low',
-      dueDate: '2023-07-30',
-      assignee: 5,
-      project: 1
-    },
-    {
-      id: 6,
-      title: 'Data migration planning',
-      description: 'Create a plan for migrating data to the new CRM',
-      status: 'in_progress',
-      priority: 'high',
-      dueDate: '2023-07-22',
-      assignee: 4,
-      project: 3
-    }
-  ];
-  
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'in_progress':
-        return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">In Progress</Badge>;
-      case 'completed':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Completed</Badge>;
-      case 'on_hold':
-        return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">On Hold</Badge>;
-      case 'todo':
-        return <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-100">To Do</Badge>;
-      case 'review':
-        return <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">In Review</Badge>;
-      default:
-        return <Badge>{status}</Badge>;
-    }
+  const handleCreateProject = () => {
+    toast({
+      title: "Create Project",
+      description: "Project creation form would open here",
+    });
   };
   
-  const getPriorityBadge = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">High</Badge>;
-      case 'medium':
-        return <Badge className="bg-orange-100 text-orange-800 hover:bg-orange-100">Medium</Badge>;
-      case 'low':
-        return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Low</Badge>;
-      default:
-        return <Badge>{priority}</Badge>;
-    }
+  const handleJoinMeeting = () => {
+    toast({
+      title: "Join Meeting",
+      description: "Video conference would start here",
+    });
   };
   
-  const getMemberById = (id: number) => {
-    return teamMembers.find(member => member.id === id);
-  };
-  
-  const getProjectById = (id: number) => {
-    return projects.find(project => project.id === id);
-  };
-  
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-500';
-      case 'away':
-        return 'bg-yellow-500';
-      case 'offline':
-        return 'bg-gray-400';
-      default:
-        return 'bg-gray-400';
-    }
-  };
-
   return (
-    <>
-      {/* Breadcrumbs */}
-      <Breadcrumbs items={[{ label: 'Collaboration' }]} />
-      
-      {/* Page Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold">Collaboration</h1>
-        <p className="text-gray-500">Manage projects, tasks, and team members</p>
+    <div>
+      {/* Breadcrumb */}
+      <div className="flex items-center text-sm mb-4">
+        <Link href="/">
+          <a className="text-primary">Home</a>
+        </Link>
+        <ChevronRight className="h-4 w-4 text-gray-400 mx-2" />
+        <span className="text-secondarytext">Collaboration</span>
       </div>
       
-      {/* Collaboration Tabs */}
-      <Tabs defaultValue="projects" value={activeTab} onValueChange={setActiveTab} className="mb-6">
-        <TabsList className="w-full bg-background border border-border rounded-lg mb-4">
-          <TabsTrigger value="projects" className="flex-1">Projects</TabsTrigger>
-          <TabsTrigger value="tasks" className="flex-1">Tasks</TabsTrigger>
-          <TabsTrigger value="team" className="flex-1">Team</TabsTrigger>
-        </TabsList>
-        
-        {/* Projects Tab */}
-        <TabsContent value="projects">
-          <div className="flex flex-col md:flex-row justify-between mb-4 gap-4">
-            <div className="flex items-center space-x-2">
-              <h3 className="text-lg font-medium">Projects</h3>
-              <Badge className="bg-primary text-white">{projects.length}</Badge>
+      {/* Page Title & Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+        <div>
+          <h1 className="text-xl font-semibold text-primarytext">Team Workspace</h1>
+          <p className="text-secondarytext mt-1">Collaborate with your team on projects and tasks</p>
+        </div>
+        <div className="flex space-x-2 mt-2 sm:mt-0">
+          <Button variant="outline" className="flex items-center" onClick={handleJoinMeeting}>
+            <Users className="h-4 w-4 mr-2" />
+            Join Meeting
+          </Button>
+          <Button className="flex items-center" onClick={handleCreateProject}>
+            <Plus className="h-4 w-4 mr-2" />
+            New Project
+          </Button>
+        </div>
+      </div>
+      
+      {/* Quick Nav Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <Card className="p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
+          <div className="flex items-center">
+            <div className="h-10 w-10 rounded-md bg-primary-light bg-opacity-20 flex items-center justify-center text-primary mr-3">
+              <MessageCircle className="h-5 w-5" />
             </div>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Select defaultValue="all">
-                <SelectTrigger className="w-full sm:w-40">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="in_progress">In Progress</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="on_hold">On Hold</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button className="bg-primary text-white hover:bg-primary/90 transition-colors">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-4 w-4 mr-2"
-                >
-                  <line x1="12" x2="12" y1="5" y2="19" />
-                  <line x1="5" x2="19" y1="12" y2="12" />
-                </svg>
-                New Project
-              </Button>
+            <div>
+              <h3 className="text-primarytext font-medium">Messages</h3>
+              <p className="text-xs text-secondarytext">5 unread</p>
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {projects.map((project) => (
-              <CardView key={project.id}>
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-lg font-medium">{project.name}</h3>
-                  {getStatusBadge(project.status)}
+        </Card>
+        
+        <Card className="p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
+          <div className="flex items-center">
+            <div className="h-10 w-10 rounded-md bg-green-100 flex items-center justify-center text-green-600 mr-3">
+              <CheckCircle className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-primarytext font-medium">Tasks</h3>
+              <p className="text-xs text-secondarytext">12 active</p>
+            </div>
+          </div>
+        </Card>
+        
+        <Card className="p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
+          <div className="flex items-center">
+            <div className="h-10 w-10 rounded-md bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+              <Calendar className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-primarytext font-medium">Calendar</h3>
+              <p className="text-xs text-secondarytext">2 events today</p>
+            </div>
+          </div>
+        </Card>
+        
+        <Card className="p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
+          <div className="flex items-center">
+            <div className="h-10 w-10 rounded-md bg-amber-100 flex items-center justify-center text-amber-600 mr-3">
+              <FileText className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-primarytext font-medium">Documents</h3>
+              <p className="text-xs text-secondarytext">25 shared files</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+      
+      {/* Projects Section */}
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold text-primarytext">Active Projects</h2>
+          <Link href="/projects">
+            <a className="text-sm text-primary hover:underline">View All</a>
+          </Link>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {projects.map((project) => (
+            <Card key={project.id} className="overflow-hidden">
+              <div className="p-5">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-primarytext font-semibold">{project.name}</h3>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
                 </div>
-                <p className="text-sm text-gray-500 mb-4">{project.description}</p>
+                <p className="text-sm text-secondarytext mb-4">{project.description}</p>
                 
                 <div className="mb-4">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-xs text-gray-500">Progress</span>
-                    <span className="text-xs font-medium">{project.progress}%</span>
+                  <div className="flex justify-between items-center mb-1 text-sm">
+                    <span className="text-secondarytext">Progress</span>
+                    <span className="text-primarytext font-medium">{project.progress}%</span>
                   </div>
-                  <Progress value={project.progress} className="h-2" />
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-primary rounded-full h-2" 
+                      style={{ width: `${project.progress}%` }}
+                    ></div>
+                  </div>
                 </div>
                 
                 <div className="flex justify-between items-center mb-4">
                   <div className="text-sm">
-                    <span className="text-gray-500">Due Date:</span>{' '}
-                    <span className="font-medium">{formatDate(project.dueDate)}</span>
+                    <span className="text-secondarytext">Due: </span>
+                    <span className="text-primarytext">{project.dueDate}</span>
                   </div>
-                  <div className="flex -space-x-2">
-                    {project.members.map((memberId) => {
-                      const member = getMemberById(memberId);
-                      if (!member) return null;
-                      
-                      return (
-                        <Avatar key={member.id} className={`h-8 w-8 border-2 border-white ${member.avatarColor}`}>
-                          <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
-                        </Avatar>
-                      );
-                    })}
+                  <div className="text-sm">
+                    <span className="text-primarytext font-medium">{project.completedTasks}/{project.tasks} </span>
+                    <span className="text-secondarytext">tasks</span>
                   </div>
                 </div>
                 
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" size="sm">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4 mr-1"
-                    >
-                      <rect width="18" height="18" x="3" y="3" rx="2" />
-                      <path d="M8 12h8" />
-                      <path d="M12 8v8" />
-                    </svg>
-                    Add Task
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4 mr-1"
-                    >
-                      <path d="M3 12h4l3 8 4-16 3 8h4" />
-                    </svg>
-                    Details
-                  </Button>
+                <div className="flex justify-between items-center">
+                  <div className="flex -space-x-2">
+                    {project.members.slice(0, 3).map((member) => (
+                      <Avatar key={member.id} className="border-2 border-white h-8 w-8">
+                        <AvatarImage src={member.avatar} />
+                        <AvatarFallback className="bg-primary text-white text-xs">
+                          {member.initials}
+                        </AvatarFallback>
+                      </Avatar>
+                    ))}
+                    {project.members.length > 3 && (
+                      <div className="h-8 w-8 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-xs text-secondarytext">
+                        +{project.members.length - 3}
+                      </div>
+                    )}
+                  </div>
+                  <Button variant="outline" size="sm" className="text-xs">Details</Button>
                 </div>
-              </CardView>
-            ))}
-          </div>
-        </TabsContent>
-        
-        {/* Tasks Tab */}
-        <TabsContent value="tasks">
-          <div className="flex flex-col md:flex-row justify-between mb-4 gap-4">
-            <div className="flex items-center space-x-2">
-              <h3 className="text-lg font-medium">Tasks</h3>
-              <Badge className="bg-primary text-white">{tasks.length}</Badge>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Input 
-                placeholder="Search tasks..." 
-                className="w-full sm:w-64"
-              />
-              <Select defaultValue="all_status">
-                <SelectTrigger className="w-full sm:w-40">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all_status">All Statuses</SelectItem>
-                  <SelectItem value="todo">To Do</SelectItem>
-                  <SelectItem value="in_progress">In Progress</SelectItem>
-                  <SelectItem value="review">In Review</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select defaultValue="all_priority">
-                <SelectTrigger className="w-full sm:w-40">
-                  <SelectValue placeholder="Priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all_priority">All Priorities</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button className="bg-primary text-white hover:bg-primary/90 transition-colors">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-4 w-4 mr-2"
-                >
-                  <line x1="12" x2="12" y1="5" y2="19" />
-                  <line x1="5" x2="19" y1="12" y2="12" />
-                </svg>
-                New Task
-              </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+      
+      {/* Two Column Layout: Team Members and Activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Team Members */}
+        <Card className="col-span-1">
+          <div className="p-5 border-b border-gray-100">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-primarytext">Team Members</h2>
+              <Button variant="ghost" size="sm">See All</Button>
             </div>
           </div>
           
-          <div className="space-y-4">
-            {tasks.map((task) => {
-              const assignee = task.assignee ? getMemberById(task.assignee) : null;
-              const project = getProjectById(task.project);
-              
-              return (
-                <CardView key={task.id}>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                    <div className="flex items-center">
-                      <div className="mr-3">
-                        <input 
-                          type="checkbox" 
-                          className="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary"
-                          checked={task.status === 'completed'}
-                          onChange={() => {}}
-                        />
-                      </div>
-                      <div>
-                        <h3 className={`font-medium ${task.status === 'completed' ? 'line-through text-gray-500' : ''}`}>
-                          {task.title}
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">{task.description}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2 sm:space-x-4 ml-8 sm:ml-0">
-                      {getPriorityBadge(task.priority)}
-                      {getStatusBadge(task.status)}
-                    </div>
-                  </div>
-                  
-                  <div className="ml-8 grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                    <div>
-                      <span className="text-xs text-gray-500 block">Project</span>
-                      <span className="text-sm font-medium">{project?.name || 'Unknown'}</span>
-                    </div>
-                    <div>
-                      <span className="text-xs text-gray-500 block">Due Date</span>
-                      <span className="text-sm font-medium">{formatDate(task.dueDate)}</span>
-                    </div>
-                    <div>
-                      <span className="text-xs text-gray-500 block">Assignee</span>
-                      {assignee ? (
-                        <div className="flex items-center mt-1">
-                          <Avatar className={`h-6 w-6 mr-2 ${assignee.avatarColor}`}>
-                            <AvatarFallback>{getInitials(assignee.name)}</AvatarFallback>
-                          </Avatar>
-                          <span className="text-sm">{assignee.name}</span>
-                        </div>
-                      ) : (
-                        <span className="text-sm">Unassigned</span>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-end space-x-2 mt-4">
-                    <Button variant="outline" size="sm">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-4 w-4 mr-1"
-                      >
-                        <path d="M12 20h9" />
-                        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-                      </svg>
-                      Edit
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-4 w-4 mr-1"
-                      >
-                        <path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5Z" />
-                        <path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1" />
-                      </svg>
-                      Comments
-                    </Button>
-                  </div>
-                </CardView>
-              );
-            })}
-          </div>
-        </TabsContent>
-        
-        {/* Team Tab */}
-        <TabsContent value="team">
-          <div className="flex flex-col md:flex-row justify-between mb-4 gap-4">
-            <div className="flex items-center space-x-2">
-              <h3 className="text-lg font-medium">Team Members</h3>
-              <Badge className="bg-primary text-white">{teamMembers.length}</Badge>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Input 
-                placeholder="Search members..." 
-                className="w-full sm:w-64"
+          <div className="p-2">
+            <div className="relative mb-3 px-3">
+              <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <input 
+                type="text" 
+                placeholder="Search team members..." 
+                className="w-full pl-8 pr-4 py-2 text-sm bg-gray-100 border border-transparent rounded-lg focus:bg-white focus:border-primary-light focus:ring-1 focus:ring-primary-light outline-none transition"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <Button className="bg-primary text-white hover:bg-primary/90 transition-colors">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-4 w-4 mr-2"
-                >
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <line x1="19" x2="19" y1="8" y2="14" />
-                  <line x1="22" x2="16" y1="11" y2="11" />
-                </svg>
-                Add Member
-              </Button>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-lg border border-border shadow-sm overflow-hidden">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 py-3 px-4 bg-gray-50 border-b border-border">
-              <div className="font-medium text-sm text-gray-500 md:col-span-2">Name</div>
-              <div className="font-medium text-sm text-gray-500 hidden md:block">Role</div>
-              <div className="font-medium text-sm text-gray-500 hidden md:block">Email</div>
-              <div className="font-medium text-sm text-gray-500">Status</div>
             </div>
             
             {teamMembers.map((member) => (
-              <div 
-                key={member.id} 
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 py-4 px-4 border-b border-border hover:bg-gray-50"
-              >
-                <div className="flex items-center md:col-span-2 mb-2 sm:mb-0">
-                  <Avatar className={`h-8 w-8 mr-3 ${member.avatarColor}`}>
-                    <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="font-medium">{member.name}</div>
-                    <div className="text-sm text-gray-500 md:hidden">{member.role}</div>
+              <div key={member.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer">
+                <div className="flex items-center">
+                  <div className="relative">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={member.avatar} />
+                      <AvatarFallback className="bg-primary text-white">
+                        {member.initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white ${
+                      member.status === 'online' ? 'bg-green-500' : 
+                      member.status === 'away' ? 'bg-amber-500' : 'bg-gray-300'
+                    }`}></div>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-primarytext">{member.name}</h3>
+                    <p className="text-xs text-secondarytext">{member.position}</p>
                   </div>
                 </div>
-                <div className="hidden md:flex md:items-center text-sm">
-                  {member.role}
-                </div>
-                <div className="hidden md:flex md:items-center text-sm">
-                  {member.email}
-                </div>
-                <div className="flex items-center justify-between sm:justify-start">
-                  <div className="flex items-center">
-                    <span className={`h-2.5 w-2.5 rounded-full ${getStatusColor(member.status)} mr-2`}></span>
-                    <span className="text-sm capitalize">{member.status}</span>
+                <Button variant="ghost" size="sm" className="text-xs">Message</Button>
+              </div>
+            ))}
+          </div>
+        </Card>
+        
+        {/* Activity Feed */}
+        <Card className="col-span-1 lg:col-span-2">
+          <div className="p-5 border-b border-gray-100">
+            <h2 className="text-lg font-semibold text-primarytext">Recent Activity</h2>
+          </div>
+          
+          <div className="p-4">
+            {activities.map((activity) => (
+              <div key={activity.id} className="flex mb-4 last:mb-0">
+                <Avatar className="h-10 w-10 mr-3 mt-1">
+                  <AvatarImage src={activity.user.avatar} />
+                  <AvatarFallback className="bg-primary text-white">
+                    {activity.user.initials}
+                  </AvatarFallback>
+                </Avatar>
+                
+                <div className="flex-1">
+                  <div className="text-sm">
+                    <span className="font-medium text-primarytext">{activity.user.name}</span>
+                    <span className="text-secondarytext"> {activity.action} </span>
+                    <span className="font-medium text-primarytext">{activity.target}</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-4 w-4"
-                      >
-                        <path d="M12 20h9" />
-                        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-                      </svg>
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="h-4 w-4"
-                      >
-                        <path d="M18 6 6 18" />
-                        <path d="m6 6 12 12" />
-                      </svg>
-                    </Button>
+                  
+                  {activity.content && (
+                    <div className="mt-2 mb-2 p-3 bg-gray-50 rounded-md text-sm text-secondarytext">
+                      {activity.content}
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center text-xs text-secondarytext mt-1">
+                    <span>{activity.time}</span>
+                    <Button variant="ghost" size="sm" className="text-xs ml-2 h-auto p-1 hover:text-primary">Reply</Button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </TabsContent>
-      </Tabs>
-    </>
+        </Card>
+      </div>
+    </div>
   );
 };
 
