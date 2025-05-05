@@ -1,0 +1,71 @@
+Build a full-stack authentication system using:
+
+🛠️ Stack:
+- Backend: Node.js + Express.js + PostgreSQL (via Prisma or Sequelize ORM)
+- Frontend: React.js + Tailwind CSS
+- Auth: JWT for authentication, bcrypt for password hashing
+
+🔐 Backend Functionality (Express + PostgreSQL):
+- Use Prisma or Sequelize ORM to connect to PostgreSQL
+- Create the following API routes:
+
+  ✅ POST /register
+  - Accepts: userName, companyName, email, phone, password, confirmPassword
+  - Hash password and save user to PostgreSQL
+  - Generate and save OTP
+  - Simulate sending OTP via email (console.log is fine)
+  - Response: success → frontend shows OTP verification popup
+
+  ✅ POST /verify-otp
+  - Accepts: email, otp
+  - Verifies OTP and sets `isVerified` true
+
+  ✅ POST /login
+  - Accepts: email, password
+  - Verifies user, password, and JWT token return
+
+  ✅ POST /forgot-password
+  - Accepts: email
+  - Generates and saves OTP, simulate sending to email
+  - Response: success → frontend opens OTP popup
+
+  ✅ POST /verify-forgot-otp
+  - Accepts: email, otp
+  - Verifies OTP, response: success → frontend opens reset password popup
+
+  ✅ POST /reset-password
+  - Accepts: email, newPassword, confirmPassword
+  - Updates password after verifying OTP
+
+  ✅ POST /change-password
+  - Accepts: oldPassword, newPassword
+  - Authenticated route using JWT
+
+🧠 PostgreSQL Schema (via Prisma or Sequelize):
+- User table:
+  - id, userName, companyName, email, phone, password (hashed), isVerified (boolean)
+  - otp (string), otpExpires (timestamp), createdAt, updatedAt
+
+💻 Frontend Functionality (React + Tailwind):
+- Register Page:
+  - Fields: userName, companyName, email, phone, password, confirmPassword
+  - ✅ On success: open OTP Verification Popup
+
+- OTP Verification Popup:
+  - Enter OTP → call /verify-otp
+
+- Login Page:
+  - email, password → store token and redirect to dashboard
+
+- Forgot Password:
+  - ✅ Step 1: Email popup → call /forgot-password
+  - ✅ Step 2: OTP popup → call /verify-forgot-otp
+  - ✅ Step 3: Reset Password popup → call /reset-password
+
+- Change Password Page:
+  - Protected route
+  - Current Password, New Password → call /change-password
+
+- Use JWT to protect routes
+- Show success/error messages with toast
+- Responsive UI with Tailwind CSS
