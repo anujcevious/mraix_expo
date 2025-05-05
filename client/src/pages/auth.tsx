@@ -3,7 +3,11 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/store";
-import { loginStart, loginSuccess, loginFailure } from "../../../store/silce/auth/authSlice";
+import {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+} from "../../../store/silce/auth/authSlice";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import OTPVerificationPopup from "@/components/popups/OTPVerificationPopup";
 import ForgotPasswordPopup from "@/components/popups/ForgotPasswordPopup";
@@ -29,8 +33,9 @@ export default function AuthPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
-  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState<boolean>(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] =
+    useState<boolean>(false);
   const [otp, setOtp] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [, setLocation] = useLocation();
@@ -110,7 +115,9 @@ export default function AuthPage() {
 
       if (data.status) {
         setShowOtpModal(true);
-        toast.success("Registration successful! Please verify OTP sent to your email.");
+        toast.success(
+          "Registration successful! Please verify OTP sent to your email.",
+        );
       } else {
         toast.error(data.message || "Registration failed");
       }
@@ -142,37 +149,39 @@ export default function AuthPage() {
         isOpen={showForgotPasswordModal}
         onClose={() => setShowForgotPasswordModal(false)}
       />
-      <OTPVerificationPopup
-        email={formData.email}
-        isOpen={showOtpModal}
-        onClose={() => setShowOtpModal(false)}
-        onVerify={async (otp) => {
-          try {
-            const response = await fetch("/api/auth/verify-otp", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: formData.email,
-                verificationcode: otp,
-              }),
-            });
+      {showOtpModal && (
+        <OTPVerificationPopup
+          email={formData.email}
+          isOpen={showOtpModal}
+          onClose={() => setShowOtpModal(false)}
+          onVerify={async (otp) => {
+            try {
+              const response = await fetch("/api/auth/verify-otp", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  email: formData.email,
+                  verificationcode: otp,
+                }),
+              });
 
-            const data = await response.json();
+              const data = await response.json();
 
-            if (data.status) {
-              setShowOtpModal(false);
-              setLocation("/");
-              toast.success("Email verified successfully!");
-            } else {
-              toast.error(data.message || "OTP verification failed");
+              if (data.status) {
+                setShowOtpModal(false);
+                setLocation("/");
+                toast.success("Email verified successfully!");
+              } else {
+                toast.error(data.message || "OTP verification failed");
+              }
+            } catch (error) {
+              toast.error("OTP verification failed");
             }
-          } catch (error) {
-            toast.error("OTP verification failed");
-          }
-        }}
-      />
+          }}
+        />
+      )}
       <div className="flex min-h-screen">
         <div className="hidden md:flex bg-purple-600 p-6 md:p-16 flex-col justify-center">
           <h1 className="text-4xl font-bold text-white mb-4">

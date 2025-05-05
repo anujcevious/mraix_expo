@@ -15,7 +15,11 @@ interface OTPVerificationPopupProps {
   onVerified: () => void;
 }
 
-const OTPVerificationPopup = ({ email, onClose, onVerified }: OTPVerificationPopupProps) => {
+const OTPVerificationPopup = ({
+  email,
+  onClose,
+  onVerified,
+}: OTPVerificationPopupProps) => {
   const { toast } = useToast();
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +44,8 @@ const OTPVerificationPopup = ({ email, onClose, onVerified }: OTPVerificationPop
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to verify OTP",
+        description:
+          error instanceof Error ? error.message : "Failed to verify OTP",
         variant: "destructive",
       });
     } finally {
@@ -91,8 +96,8 @@ const OTPVerificationPopup = ({ email, onClose, onVerified }: OTPVerificationPop
             />
 
             <div className="space-y-2">
-              <Button 
-                className="w-full" 
+              <Button
+                className="w-full"
                 onClick={handleVerify}
                 disabled={otp.length !== 6 || isLoading}
               >
