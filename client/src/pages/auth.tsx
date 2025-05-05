@@ -1,12 +1,13 @@
 import { useState, FormEvent } from "react";
-import LoadingSpinner from "../components/LoadingSpinner";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store/store";
-loginUser
-import { toast } from "react-hot-toast";
+import { AppDispatch } from "@/lib/store";
+import { loginStart, loginSuccess, loginFailure } from "@/lib/slices/authSlice";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import OTPVerificationPopup from "@/components/popups/OTPVerificationPopup";
 import ForgotPasswordPopup from "@/components/popups/ForgotPasswordPopup";
+import { toast } from "react-hot-toast";
 
 interface FormData {
   name: string;
@@ -31,8 +32,8 @@ export default function AuthPage() {
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const [otp, setOtp] = useState("");
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [, setLocation] = useLocation();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,22 +48,30 @@ export default function AuthPage() {
     }
 
     try {
-      const result = await dispatch(
-        loginUser({
-          identifier: formData.email,
+      dispatch(loginStart());
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
           password: formData.password,
         }),
-      ).unwrap();
+      });
 
-      console.log(result, "resultlogin>>");
+      const data = await response.json();
 
-      if (result.status) {
+      if (data.status) {
+        dispatch(loginSuccess(data));
         toast.success("Login successful!");
-        await router.push("/");
+        setLocation("/");
       } else {
+        dispatch(loginFailure(data.message || "Login failed"));
         toast.error("Login failed. Please check your credentials.");
       }
     } catch (error) {
+      dispatch(loginFailure("Login failed"));
       console.error("Login error:", error);
       toast.error("Login failed");
     }
@@ -82,8 +91,12 @@ export default function AuthPage() {
     }
 
     try {
-      const result = await dispatch(
-        registerUser({
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           username: formData.name,
           email: formData.email,
           phone: formData.phone,
@@ -91,14 +104,16 @@ export default function AuthPage() {
           companyname: formData.companyName,
           ispartner: false,
         }),
-      ).unwrap();
+      });
 
-      console.log(result, "result>>DOJPKL");
+      const data = await response.json();
 
-      setShowOtpModal(true);
-      toast.success(
-        "Registration successful! Please verify OTP sent to your email.",
-      );
+      if (data.status) {
+        setShowOtpModal(true);
+        toast.success("Registration successful! Please verify OTP sent to your email.");
+      } else {
+        toast.error(data.message || "Registration failed");
+      }
     } catch (error) {
       console.error("Registration error:", error);
       toast.error("Registration failed");
@@ -120,23 +135,6 @@ export default function AuthPage() {
     }
   };
 
-  const handleOtpSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-      await dispatch(
-        verifyOtp({
-          email: formData.email,
-          verificationcode: otp,
-        }),
-      ).unwrap();
-      setShowOtpModal(false);
-      router.push("/");
-      toast.success("Email verified successfully!");
-    } catch (error) {
-      toast.error("OTP verification failed");
-    }
-  };
-
   return (
     <>
       {isLoading && <LoadingSpinner />}
@@ -150,15 +148,26 @@ export default function AuthPage() {
         onClose={() => setShowOtpModal(false)}
         onVerify={async (otp) => {
           try {
-            await dispatch(
-              verifyOtp({
+            const response = await fetch("/api/auth/verify-otp", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
                 email: formData.email,
                 verificationcode: otp,
               }),
-            ).unwrap();
-            setShowOtpModal(false);
-            router.push("/");
-            toast.success("Email verified successfully!");
+            });
+
+            const data = await response.json();
+
+            if (data.status) {
+              setShowOtpModal(false);
+              setLocation("/");
+              toast.success("Email verified successfully!");
+            } else {
+              toast.error(data.message || "OTP verification failed");
+            }
           } catch (error) {
             toast.error("OTP verification failed");
           }
