@@ -59,9 +59,9 @@ export default function AuthPage() {
           password: formData.password,
         }),
       });
-      
+
       const data = await response.json();
-      
+
       if (data.status) {
         dispatch(loginSuccess({ user: data.user, token: data.token }));
         toast.success("Login successful!");
