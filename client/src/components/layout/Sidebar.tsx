@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { toggleSidebar, collapseSidebar } from "../../../store/silce/sidebarSlice";
+import { toggleSidebar, collapseSidebar } from "../../../../store/silce/sidebarSlice";
 import {
   addFavorite,
   removeFavorite,
