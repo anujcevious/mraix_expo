@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import {
   toggleSidebar,
-  expandSidebar,
   collapseSidebar,
 } from "@/lib/slices/sidebarSlice";
 import {
@@ -16,8 +15,6 @@ import {
   ChevronRight,
   ChevronLeft,
   ChevronDown,
-  Menu,
-  Star,
   Home,
   ShoppingCart,
   ShoppingBag,
@@ -25,17 +22,8 @@ import {
   Users,
   MessageSquare,
   Pin,
-  X,
-  FileText,
-  CreditCard,
-  RefreshCw,
-  HelpCircle,
-  DollarSign,
-  MoreVertical,
-  Printer,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Tooltip,
   TooltipContent,
@@ -103,25 +91,6 @@ const Sidebar = () => {
     return location === path;
   };
 
-  const renderMenuIcon = (icon: string) => {
-    switch (icon) {
-      case "home":
-        return <Home className="h-5 w-5" />;
-      case "shopping-cart":
-        return <ShoppingCart className="h-5 w-5" />;
-      case "shopping-bag":
-        return <ShoppingBag className="h-5 w-5" />;
-      case "pie-chart":
-        return <PieChart className="h-5 w-5" />;
-      case "users":
-        return <Users className="h-5 w-5" />;
-      case "message-square":
-        return <MessageSquare className="h-5 w-5" />;
-      default:
-        return <Home className="h-5 w-5" />;
-    }
-  };
-
   // Determine which classes to use based on mobile vs desktop state
   const sidebarClasses = isMobile
     ? `bg-white border-r border-gray-200 h-full shadow-md flex flex-col ${isMobileOpen ? "sidebar-mobile-open sidebar-expanded" : "sidebar-mobile-closed"}`
@@ -176,21 +145,25 @@ const Sidebar = () => {
                     <TooltipTrigger asChild>
                       <Link href={item.path}>
                         <a
-                          className={`py-1 px-2 rounded-md ${isActive(item.path) ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-light-bg-color"} flex items-center space-x-2 mb-1`}
+                          className={`py-1 flex justify-between px-2 rounded-md ${isActive(item.path) ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-light-bg-color"} flex items-center space-x-2 mb-1`}
                         >
-                          {renderMenuIcon(item.icon)}
+                          <div className="flex gap-2">
+                            <Icons name={item.icon} />
+                            {isExpanded && (
+                              <span className="text-sm">{item.label}</span>
+                            )}
+                          </div>
                           {isExpanded && (
-                            <span className="text-sm">{item.label}</span>
-                          )}
-                          {isExpanded && (
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="ml-auto p-0 h-4 w-4 text-primary"
-                              onClick={(e) => handlePinItem(e, item)}
-                            >
-                              <Pin className="h-3 w-3 mr-auto bg-yellow" />
-                            </Button>
+                            <div className="flex justify-end p-2">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="ml-auto p-0 h-4 w-4 text-primary"
+                                onClick={(e) => handlePinItem(e, item)}
+                              >
+                                <Pin className="h-3 w-3 mr-auto bg-yellow" />
+                              </Button>
+                            </div>
                           )}
                         </a>
                       </Link>
