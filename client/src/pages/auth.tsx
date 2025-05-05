@@ -55,11 +55,16 @@ const registerFormSchema = z.object({
 type LoginFormValues = z.infer<typeof loginFormSchema>;
 type RegisterFormValues = z.infer<typeof registerFormSchema>;
 import ForgotPasswordPopup from "@/components/popups/ForgotPasswordPopup";
+import OTPVerificationPopup from "@/components/popups/OTPVerificationPopup";
+import ChangePasswordPopup from "@/components/popups/ChangePasswordPopup";
 
 export default function AuthPage() {
   const [mode, setMode] = useState<"login" | "register">("login");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showOTPVerification, setShowOTPVerification] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState("");
   const [, setLocation] = useLocation();
   const dispatch = useDispatch();
   const { isLoading, error: authError } = useSelector(
@@ -112,11 +117,12 @@ export default function AuthPage() {
 
       if (response.ok) {
         dispatch(registerSuccess());
+        setRegisteredEmail(data.email);
+        setShowOTPVerification(true);
         toast({
           title: "Success",
-          description: "Registration successful! Please login.",
+          description: "Registration successful! Please verify your email.",
         });
-        setMode("login");
       } else {
         throw new Error(result.message || "Registration failed");
       }
@@ -132,6 +138,30 @@ export default function AuthPage() {
     <div className="min-h-screen flex">
       {showForgotPassword && (
         <ForgotPasswordPopup onClose={() => setShowForgotPassword(false)} />
+      )}
+      {showOTPVerification && (
+        <OTPVerificationPopup
+          email={registeredEmail}
+          onClose={() => setShowOTPVerification(false)}
+          onVerified={() => {
+            setShowOTPVerification(false);
+            setShowChangePassword(true);
+          }}
+        />
+      )}
+      {showChangePassword && (
+        <ChangePasswordPopup
+          email={registeredEmail}
+          onClose={() => setShowChangePassword(false)}
+          onChanged={() => {
+            setShowChangePassword(false);
+            setMode("login");
+            toast({
+              title: "Success",
+              description: "Password changed successfully! Please login.",
+            });
+          }}
+        />
       )}
       {/* Left Side - Features */}
       <div className="hidden lg:flex lg:w-1/2 bg-primary text-white p-12 flex-col justify-center">
