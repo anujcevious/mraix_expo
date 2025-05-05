@@ -101,36 +101,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   return (
     <>
       {isMobile && isOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-30"
-            onClick={onClose}
-          />
-          <div className="flex flex-col h-full">
-            <div className="p-4 border-b">
-              <div className="flex items-center space-x-3">
-                <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
-                  M
-                </div>
-                <span className="font-semibold text-lg">MrAix Expo</span>
-              </div>
-            </div>
-            <div className="flex-1 overflow-y-auto p-2">
-              {menuData.map((item) => (
-                <Link
-                  key={item.id}
-                  href={item.path || '#'}
-                  className="flex items-center space-x-3 px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700"
-                >
-                  <Icons name={item.icon} className="w-5 h-5 text-gray-500" />
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </>
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={onClose}
+        />
       )}
-
       <div className={sidebarClasses}>
         {/* Side Arrow for Quick Toggle (Fixed to the right side of sidebar) - Desktop only */}
         {!isMobile && (

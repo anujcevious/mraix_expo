@@ -32,7 +32,7 @@ const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
       <Header onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} className="px-4 h-14" />
       <div className="flex flex-1 overflow-hidden relative">
         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <main className={`flex-1 overflow-y-auto bg-gray-50 p-4 md:p-5 ${isMobile && isSidebarOpen ? 'opacity-50' : ''}`}>
+        <main className={`flex-1 overflow-y-auto bg-gray-50 p-4 md:p-5 ${isMobile && isSidebarOpen ? 'opacity-50 pointer-events-none' : ''}`}>
           {children}
         </main>
       </div>
