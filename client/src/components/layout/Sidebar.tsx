@@ -187,7 +187,7 @@ const Sidebar = () => {
                   <TooltipTrigger asChild>
                     {item.subItems ? (
                       <div
-                        className={`py-2 px-2 rounded-md text-primarytext hover:bg-secondary/5 hover:text-white ${expandedMenus.includes(item.id) ? 'bg-primary text-white' : ''} flex items-center justify-between cursor-pointer`}
+                        className={`py-2 px-2 rounded-md text-primarytext hover:bg-primary flex items-center justify-between cursor-pointer`}
                         onClick={() => toggleMenu(item.id)}
                       >
                         <div className="flex items-center space-x-2">
@@ -208,7 +208,7 @@ const Sidebar = () => {
                     ) : (
                       <Link href={item.path || "/"}>
                         <a
-                          className={`py-2 px-2 rounded-md ${isActive(item.path || "/") ? "bg-primary text-white" : "text-primarytext hover:bg-secondary/5 hover:text-white"} flex items-center space-x-2`}
+                          className={`py-2 px-2 rounded-md ${isActive(item.path || "/") ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-gray-100"} flex items-center space-x-2`}
                         >
                           <Icons
                             name={item.icon}
@@ -238,8 +238,8 @@ const Sidebar = () => {
                             <a
                               className={`block py-1 px-2 rounded-md ${
                                 isActive(subItem.path)
-                                  ? "bg-primary text-white"
-                                  : "text-secondarytext hover:bg-secondary/5 hover:text-white"
+                                  ? "bg-light-bg-color text-primary"
+                                  : "text-secondarytext hover:bg-gray-100"
                               } text-sm flex items-center justify-between`}
                             >
                               <span className="text-xs text-primarytext">
