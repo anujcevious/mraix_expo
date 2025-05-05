@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import {
-  toggleSidebar,
-  collapseSidebar,
-} from "@/lib/slices/sidebarSlice";
+import { toggleSidebar, collapseSidebar } from "@/lib/slices/sidebarSlice";
 import {
   addFavorite,
   removeFavorite,
@@ -130,7 +127,7 @@ const Sidebar = () => {
         <div className="p-3 border-b">
           <div className="flex items-center justify-between mb-2">
             {isExpanded && (
-              <h3 className="text-xs font-semibold text-text-secondary uppercase">
+              <h3 className="text-xxs font-semibold text-text-secondary uppercase">
                 Favorites
               </h3>
             )}
@@ -150,7 +147,7 @@ const Sidebar = () => {
                           <div className="flex gap-2">
                             <Icons name={item.icon} />
                             {isExpanded && (
-                              <span className="text-sm">{item.label}</span>
+                              <span className="text-xs">{item.label}</span>
                             )}
                           </div>
                           {isExpanded && (
@@ -174,7 +171,7 @@ const Sidebar = () => {
                   </Tooltip>
                 ))
               : isExpanded && (
-                  <div className="text-xs text-text-muted italic py-1 px-1">
+                  <div className="text-xs text-text-muted py-1 px-1">
                     Pin submenu pages for quick access
                   </div>
                 )}
@@ -190,13 +187,13 @@ const Sidebar = () => {
                   <TooltipTrigger asChild>
                     {item.subItems ? (
                       <div
-                        className={`py-2 px-2 rounded-md text-primarytext hover:bg-gray-100 flex items-center justify-between cursor-pointer`}
+                        className={`py-2 px-2 rounded-md text-primarytext hover:bg-primary flex items-center justify-between cursor-pointer`}
                         onClick={() => toggleMenu(item.id)}
                       >
                         <div className="flex items-center space-x-2">
                           <Icons name={item.icon} />
                           {isExpanded && (
-                            <span className="text-sm text-primarytext">
+                            <span className="text-xs text-primarytext">
                               {item.label}
                             </span>
                           )}
@@ -213,9 +210,14 @@ const Sidebar = () => {
                         <a
                           className={`py-2 px-2 rounded-md ${isActive(item.path || "/") ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-gray-100"} flex items-center space-x-2`}
                         >
-                          <Icons name={item.icon} />
+                          <Icons
+                            name={item.icon}
+                            className="text-primarytext"
+                          />
                           {isExpanded && (
-                            <span className="text-sm">{item.label}</span>
+                            <span className="text-xs text-primarytext">
+                              {item.label}
+                            </span>
                           )}
                         </a>
                       </Link>
@@ -240,7 +242,9 @@ const Sidebar = () => {
                                   : "text-secondarytext hover:bg-gray-100"
                               } text-sm flex items-center justify-between`}
                             >
-                              <span>{subItem.label}</span>
+                              <span className="text-xs text-primarytext">
+                                {subItem.label}
+                              </span>
                               {subItem.isNew && (
                                 <div className="bg-primary text-white text-[10px] px-1 py-0.5 rounded">
                                   New
@@ -280,13 +284,13 @@ const Sidebar = () => {
               <div className="flex gap-2 items-start">
                 <Icons name="HelpCircle" className="text-primary" />
                 <div>
-                  <h4 className="text-sm font-medium">Need help?</h4>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <h4 className="text-xs font-medium">Need help?</h4>
+                  <p className="text-xxs text-gray-500 mt-1">
                     Check our documentation
                   </p>
                   <a
                     href="#"
-                    className="text-xs text-primary hover:underline mt-2 inline-block"
+                    className="text-xxs text-primary hover:underline mt-2 inline-block"
                   >
                     View Documentation
                   </a>
