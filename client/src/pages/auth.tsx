@@ -376,7 +376,9 @@ export default function AuthPage() {
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Confirm Password *</FormLabel>
+                          <FormLabel className="text-xs font-normal text-primarytext">
+                            Confirm Password *
+                          </FormLabel>
                           <div className="relative">
                             <FormControl>
                               <Input
