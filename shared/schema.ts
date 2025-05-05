@@ -5,15 +5,15 @@ import { z } from "zod";
 // Users Table
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
-  name: text("name").notNull(),
+  userName: text("user_name").notNull(),
+  companyName: text("company_name").notNull(),
   email: text("email").notNull().unique(),
-  role: text("role").notNull().default("user"),
+  phone: text("phone").notNull(),
+  password: text("password").notNull(),
+  isVerified: boolean("is_verified").default(false),
+  otp: text("otp"),
+  otpExpires: timestamp("otp_expires"),
   lastLogin: timestamp("last_login"),
-  avatar: text("avatar"),
-  bio: text("bio"),
-  phone: text("phone"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
