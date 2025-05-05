@@ -3,7 +3,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/store";
-import { loginStart, loginSuccess, loginFailure } from "@/lib/slices/authSlice";
+import { loginStart, loginSuccess, loginFailure } from "../../../store/silce/auth/authSlice";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import OTPVerificationPopup from "@/components/popups/OTPVerificationPopup";
 import ForgotPasswordPopup from "@/components/popups/ForgotPasswordPopup";
