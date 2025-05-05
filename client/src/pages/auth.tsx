@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useLocation } from "wouter";
 import { useDispatch } from "react-redux";
@@ -29,10 +29,10 @@ export default function AuthPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const [showOtpModal, setShowOtpModal] = useState(false);
-  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState<boolean>(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState<boolean>(false);
+  const [otp, setOtp] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [, setLocation] = useLocation();
   const dispatch = useDispatch<AppDispatch>();
 
