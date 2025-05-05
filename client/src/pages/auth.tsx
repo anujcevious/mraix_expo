@@ -7,6 +7,7 @@ import {
   loginStart,
   loginSuccess,
   loginFailure,
+  loginUser,
 } from "../../../store/silce/auth/authSlice";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import OTPVerificationPopup from "@/components/popups/OTPVerificationPopup";
@@ -53,11 +54,15 @@ export default function AuthPage() {
     }
 
     try {
-      const result = await dispatch(loginUser({
-        identifier: formData.email,
-        password: formData.password,
-      })).unwrap();
-      
+      const result = await dispatch(
+        loginUser({
+          identifier: formData.email,
+          password: formData.password,
+        }),
+      ).unwrap();
+
+      console.log(result, "result");
+
       toast.success("Login successful!");
       setLocation("/");
     } catch (error: any) {
