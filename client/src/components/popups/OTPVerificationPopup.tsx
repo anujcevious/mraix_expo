@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,9 +28,9 @@ const OTPVerificationPopup = ({ email, onClose, onVerified }: OTPVerificationPop
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),
       });
-      
+
       const result = await response.json();
-      
+
       if (response.ok) {
         toast({ title: "Success", description: result.message });
         onVerified();
@@ -56,7 +55,7 @@ const OTPVerificationPopup = ({ email, onClose, onVerified }: OTPVerificationPop
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      
+
       const result = await response.json();
       toast({ title: "Success", description: result.message });
     } catch (error) {
@@ -88,13 +87,7 @@ const OTPVerificationPopup = ({ email, onClose, onVerified }: OTPVerificationPop
               value={otp}
               onChange={setOtp}
               maxLength={6}
-              render={({ slots }) => (
-                <InputOTPGroup>
-                  {slots.map((slot, index) => (
-                    <InputOTPSlot key={index} {...slot} />
-                  ))}
-                </InputOTPGroup>
-              )}
+              className="justify-center"
             />
 
             <div className="space-y-2">
