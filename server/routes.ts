@@ -3,7 +3,19 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import { insertUserSchema, insertFavoriteSchema, insertNotificationSchema } from "@shared/schema";
-import { createHash } from "crypto";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const OTP_EXPIRY = 10 * 60 * 1000; // 10 minutes
+
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+const generateToken = (userId: number) => {
+  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "24h" });
+};
 
 // Helper function to hash passwords
 const hashPassword = (password: string): string => {
@@ -14,28 +26,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Authentication routes
   app.post("/api/auth/login", async (req, res) => {
     try {
-      const { username, password } = req.body;
+      const { email, password } = req.body;
       
-      if (!username || !password) {
-        return res.status(400).json({ message: "Username and password are required" });
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
       }
       
-      const user = await storage.getUserByUsername(username);
+      const user = await storage.getUserByEmail(email);
       
-      if (!user) {
-        return res.status(401).json({ message: "Invalid credentials" });
+      if (!user || !user.isVerified) {
+        return res.status(401).json({ message: "Invalid credentials or account not verified" });
       }
       
-      const hashedPassword = hashPassword(password);
-      if (user.password !== hashedPassword) {
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
       
       // Update last login
       await storage.updateUserLastLogin(user.id);
       
-      // Create a token (this is simplified - in a real app use JWT)
-      const token = `token_${user.id}_${Date.now()}`;
+      const token = generateToken(user.id);
       
       // Remove password from user object
       const { password: _, ...userWithoutPassword } = user;
@@ -54,29 +65,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertUserSchema.parse(req.body);
       
-      const existingUser = await storage.getUserByUsername(validatedData.username);
-      if (existingUser) {
-        return res.status(400).json({ message: "Username already exists" });
-      }
-      
       const existingEmail = await storage.getUserByEmail(validatedData.email);
       if (existingEmail) {
         return res.status(400).json({ message: "Email already exists" });
       }
       
       // Hash the password
-      const hashedPassword = hashPassword(validatedData.password);
+      const hashedPassword = await bcrypt.hash(validatedData.password, 10);
+      
+      // Generate OTP
+      const otp = generateOTP();
+      const otpExpires = new Date(Date.now() + OTP_EXPIRY);
       
       const user = await storage.createUser({
         ...validatedData,
-        password: hashedPassword
+        password: hashedPassword,
+        isVerified: false,
+        otp,
+        otpExpires
       });
       
-      // For testing purposes, generate a "random" OTP
-      const testOTP = '123456';
-      console.log(`[TEST ONLY] OTP for ${validatedData.email}: ${testOTP}`);
+      // In production, send email with OTP
+      console.log(`[TEST ONLY] OTP for ${validatedData.email}: ${otp}`);
       
-      res.status(201).json({ message: "User registered successfully" });
+      res.status(201).json({ message: "Please verify your email with the OTP sent" });
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: error.errors[0].message });
