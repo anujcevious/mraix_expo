@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { loginSuccess } from '@/lib/slices/authSlice';
+import { loginSuccess } from '../../store/silce/auth/authSlice';
 import NotFound from "@/pages/not-found";
 import Auth from "@/pages/auth";
 import Dashboard from "@/pages/Dashboard";
