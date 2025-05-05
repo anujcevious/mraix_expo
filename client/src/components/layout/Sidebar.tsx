@@ -110,7 +110,7 @@ const Sidebar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 p-0 rounded-full hover:bg-gray-100 text-primary"
+              className="h-7 w-7 p-0 rounded-full hover:bg-primary/5 text-primary"
               onClick={handleToggleSidebar}
               aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
             >
@@ -142,7 +142,7 @@ const Sidebar = () => {
                     <TooltipTrigger asChild>
                       <Link href={item.path}>
                         <a
-                          className={`py-1 flex justify-between px-2 rounded-md ${isActive(item.path) ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-light-bg-color"} flex items-center space-x-2 mb-1`}
+                          className={`py-1 flex justify-between px-2 rounded-md ${isActive(item.path) ? "bg-primary text-white font-semibold" : "text-primarytext hover:bg-primary/5"} flex items-center space-x-2 mb-1`}
                         >
                           <div className="flex gap-2">
                             <Icons name={item.icon} />
@@ -187,7 +187,7 @@ const Sidebar = () => {
                   <TooltipTrigger asChild>
                     {item.subItems ? (
                       <div
-                        className={`py-2 px-2 rounded-md text-primarytext hover:bg-primary flex items-center justify-between cursor-pointer`}
+                        className={`py-2 px-2 rounded-md text-primarytext hover:bg-primary/5 flex items-center justify-between cursor-pointer`}
                         onClick={() => toggleMenu(item.id)}
                       >
                         <div className="flex items-center space-x-2">
@@ -208,16 +208,11 @@ const Sidebar = () => {
                     ) : (
                       <Link href={item.path || "/"}>
                         <a
-                          className={`py-2 px-2 rounded-md ${isActive(item.path || "/") ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-gray-100"} flex items-center space-x-2`}
+                          className={`py-2 px-2 rounded-md ${isActive(item.path || "/") ? "bg-primary text-white font-semibold" : "text-primarytext hover:bg-primary/5"} flex items-center space-x-2`}
                         >
-                          <Icons
-                            name={item.icon}
-                            className="text-primarytext"
-                          />
+                          <Icons name={item.icon} className="" />
                           {isExpanded && (
-                            <span className="text-xs text-primarytext">
-                              {item.label}
-                            </span>
+                            <span className="text-xs ">{item.label}</span>
                           )}
                         </a>
                       </Link>
@@ -236,15 +231,13 @@ const Sidebar = () => {
                         <li key={subItem.id}>
                           <Link href={subItem.path}>
                             <a
-                              className={`block py-1 px-2 rounded-md ${
+                              className={`block py-2 px-2 rounded-md ${
                                 isActive(subItem.path)
-                                  ? "bg-light-bg-color text-primary"
-                                  : "text-secondarytext hover:bg-gray-100"
+                                  ? "bg-primary text-white"
+                                  : "text-secondarytext hover:bg-primary/5"
                               } text-sm flex items-center justify-between`}
                             >
-                              <span className="text-xs text-primarytext">
-                                {subItem.label}
-                              </span>
+                              <span className="text-xs">{subItem.label}</span>
                               {subItem.isNew && (
                                 <div className="bg-primary text-white text-[10px] px-1 py-0.5 rounded">
                                   New
@@ -253,7 +246,7 @@ const Sidebar = () => {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-4 w-4 p-0 text-gray-400 hover:text-primary"
+                                className="h-4 w-4 p-0 "
                                 onClick={(e) =>
                                   handlePinItem(e, {
                                     id: subItem.id,
