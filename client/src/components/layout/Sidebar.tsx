@@ -44,74 +44,7 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import Icons from "../ui/Icons";
 
-const menuData = [
-  {
-    id: "dashboard",
-    label: "Dashboard",
-    icon: "Home",
-    path: "/",
-  },
-  {
-    id: "sales",
-    label: "Sales",
-    icon: "ShoppingCart",
-    subItems: [
-      { id: "customer", label: "Customer", path: "/sales/customer" },
-      { id: "invoice", label: "Invoice", path: "/sales/invoice" },
-      { id: "credit-note", label: "Credit Note", path: "/sales/credit-note" },
-      { id: "receipt", label: "Receipt", path: "/sales/receipt" },
-    ],
-  },
-  {
-    id: "purchase",
-    label: "Purchase",
-    icon: "ShoppingBag",
-    subItems: [
-      { id: "vendor", label: "Vendor", path: "/purchase/vendor" },
-      { id: "purchase", label: "Purchase", path: "/purchase/purchase" },
-      { id: "debit-note", label: "Debit Note", path: "/purchase/debit-note" },
-      { id: "payment", label: "Payment", path: "/purchase/payment" },
-    ],
-  },
-  {
-    id: "reports",
-    label: "Reports",
-    icon: "PieChart",
-    subItems: [
-      { id: "sales-report", label: "Sales Report", path: "/report/sales" },
-      {
-        id: "purchase-report",
-        label: "Purchase Report",
-        path: "/report/purchase",
-      },
-      { id: "tax-report", label: "Tax Report", path: "/report/tax" },
-      {
-        id: "profit-loss",
-        label: "Profit & Loss",
-        path: "/report/profit-loss",
-        isNew: true,
-      },
-    ],
-  },
-  {
-    id: "settings",
-    label: "Settings",
-    icon: "Users",
-    path: "/settings",
-  },
-  {
-    id: "communication",
-    label: "Communication",
-    icon: "MessageSquare",
-    path: "/communication",
-  },
-  {
-    id: "help",
-    label: "Help & Support",
-    icon: "HelpCircle",
-    path: "/help",
-  },
-];
+import { menuData } from "@/lib/menudata";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
