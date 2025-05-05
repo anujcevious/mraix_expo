@@ -53,19 +53,17 @@ const Header = ({ onMenuClick }: HeaderProps) => {
 
   return (
     <header className="bg-white border-b border-gray-200 py-3 px-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-      {/* Left: Menu Toggle and Logo */}
+      {/* Left: Company Name for Mobile / Logo + Dropdown for Desktop */}
       <div className="flex items-center">
-        {isMobile && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="mr-2"
-            onClick={onMenuClick}
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-        )}
-        <div className={`flex items-center ${isMobile ? 'w-auto' : 'w-[14rem]'}`}>
+        {isMobile ? (
+          <div className="flex items-center">
+            <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
+              M
+            </div>
+            <span className="ml-2 font-semibold text-primarytext">MrAix Expo</span>
+          </div>
+        ) : (
+        <div className={`flex items-center w-[14rem]`}>
           <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
             M
           </div>
@@ -115,6 +113,16 @@ const Header = ({ onMenuClick }: HeaderProps) => {
 
       {/* Right: Controls */}
       <div className="flex items-center space-x-4">
+        {isMobile && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="p-0"
+            onClick={onMenuClick}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+        )}
         {/* Period Selector */}
         <div className="hidden md:block">
           <div className="flex items-center border border-gray-200 rounded-lg px-2 py-1 text-sm">
