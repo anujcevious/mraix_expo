@@ -41,6 +41,7 @@ const registerFormSchema = z.object({
   phone: z.string().min(10, "Please enter a valid phone number"),
   companyName: z.string().min(2, "Company name is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(6, "Password must be at least 6 characters").refine((val) => val === registerForm.getValues("password"), { message: "Passwords must match" }),
   acceptTerms: z.boolean().refine((val) => val, {
     message: "You must accept the terms and conditions",
   }),
@@ -72,6 +73,7 @@ export default function AuthPage() {
       phone: "",
       companyName: "",
       password: "",
+      confirmPassword: "",
       acceptTerms: false,
     },
   });
@@ -358,6 +360,25 @@ export default function AuthPage() {
                               <Eye size={16} />
                             )}
                           </button>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password *</FormLabel>
+                        <div className="relative">
+                          <FormControl>
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              {...field}
+                            />
+                          </FormControl>
                         </div>
                         <FormMessage />
                       </FormItem>
