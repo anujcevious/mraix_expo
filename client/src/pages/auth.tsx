@@ -53,32 +53,15 @@ export default function AuthPage() {
     }
 
     try {
-      dispatch(loginStart());
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.status) {
-        dispatch(loginSuccess(data));
-        toast.success("Login successful!");
-        setLocation("/");
-      } else {
-        dispatch(loginFailure(data.message || "Login failed"));
-        toast.error("Login failed. Please check your credentials.");
-      }
-    } catch (error) {
-      dispatch(loginFailure("Login failed"));
-      console.error("Login error:", error);
-      toast.error("Login failed");
+      const result = await dispatch(loginUser({
+        identifier: formData.email,
+        password: formData.password,
+      })).unwrap();
+      
+      toast.success("Login successful!");
+      setLocation("/");
+    } catch (error: any) {
+      toast.error(error || "Login failed. Please check your credentials.");
     }
   };
 

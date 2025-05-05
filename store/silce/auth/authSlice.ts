@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface LoginPayload {
-  email: string;
+  identifier: string;
   password: string;
 }
 
@@ -15,7 +15,7 @@ interface AuthState {
       issuperadmin: boolean;
       issuspended: boolean;
     };
-  };
+  } | null;
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
@@ -129,22 +129,29 @@ export const verifyOtp = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async (credentials: LoginPayload) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+  async (credentials: LoginPayload, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
         },
-        body: JSON.stringify(credentials),
-      },
-    );
-    // const data = await response.json();
-    // if (!data.status) {
-    //   throw new Error(data.message || "Login failed");
-    // }
-    return response;
+      );
+      const data = await response.json();
+      if (!data.status) {
+        return rejectWithValue(data.message || "Login failed");
+      }
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Login failed");
+    }
   },
 );
 
