@@ -56,7 +56,9 @@ type LoginFormValues = z.infer<typeof loginFormSchema>;
 type RegisterFormValues = z.infer<typeof registerFormSchema>;
 
 export default function AuthPage() {
-  const [mode, setMode] = useState<"login" | "register">("login");
+  import ForgotPasswordPopup from "@/components/popups/ForgotPasswordPopup";
+const [mode, setMode] = useState<"login" | "register">("login");
+const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [, setLocation] = useLocation();
   const dispatch = useDispatch();
@@ -128,6 +130,9 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex">
+      {showForgotPassword && (
+        <ForgotPasswordPopup onClose={() => setShowForgotPassword(false)} />
+      )}
       {/* Left Side - Features */}
       <div className="hidden lg:flex lg:w-1/2 bg-primary text-white p-12 flex-col justify-center">
         <div className="max-w-lg">
@@ -240,7 +245,11 @@ export default function AuthPage() {
                         </FormItem>
                       )}
                     />
-                    <Button variant="link" className="text-xs text-primary p-0">
+                    <Button
+                      variant="link"
+                      className="text-xs text-primary p-0"
+                      onClick={() => setShowForgotPassword(true)}
+                    >
                       Forgot Password?
                     </Button>
                   </div>
