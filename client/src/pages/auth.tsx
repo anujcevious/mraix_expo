@@ -35,22 +35,22 @@ const loginFormSchema = z.object({
   rememberMe: z.boolean().default(false),
 });
 
-const registerFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email"),
-  phone: z.string().min(10, "Please enter a valid phone number"),
-  companyName: z.string().min(2, "Company name is required"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .refine((val) => val === registerForm.getValues("password"), {
-      message: "Passwords must match",
+const registerFormSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email"),
+    phone: z.string().min(10, "Please enter a valid phone number"),
+    companyName: z.string().min(2, "Company name is required"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+    acceptTerms: z.boolean().refine((val) => val, {
+      message: "You must accept the terms and conditions",
     }),
-  acceptTerms: z.boolean().refine((val) => val, {
-    message: "You must accept the terms and conditions",
-  }),
-});
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
 type RegisterFormValues = z.infer<typeof registerFormSchema>;
