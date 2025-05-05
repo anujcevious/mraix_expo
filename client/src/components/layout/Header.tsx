@@ -12,7 +12,7 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { logout } from "@/lib/slices/authSlice";
+import { logout } from "../../../../store/silce/auth/authSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
