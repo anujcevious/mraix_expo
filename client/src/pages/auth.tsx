@@ -54,19 +54,24 @@ export default function AuthPage() {
     }
 
     try {
+      setIsLoading(true);
       const result = await dispatch(
         loginUser({
           identifier: formData.email,
           password: formData.password,
-        }),
+        })
       ).unwrap();
 
-      console.log(result, "result");
-
-      toast.success("Login successful!");
-      setLocation("/");
+      if (result.status) {
+        toast.success("Login successful!");
+        setLocation("/");
+      } else {
+        toast.error(result.message || "Login failed");
+      }
     } catch (error: any) {
       toast.error(error || "Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
