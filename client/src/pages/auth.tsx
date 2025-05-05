@@ -39,7 +39,7 @@ const loginFormSchema = z.object({
 
 const registerFormSchema = z
   .object({
-    name: z.string().min(2, "Name must be at least 2 characters"),
+    userName: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Please enter a valid email"),
     phone: z.string().min(10, "Please enter a valid phone number"),
     companyName: z.string().min(2, "Company name is required"),
@@ -82,7 +82,7 @@ export default function AuthPage() {
   const registerForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
-      name: "",
+      userName: "",
       email: "",
       phone: "",
       companyName: "",
@@ -367,7 +367,7 @@ export default function AuthPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <FormField
                       control={registerForm.control}
-                      name="name"
+                      name="userName"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-xs font-normal text-primarytext">
