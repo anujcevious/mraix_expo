@@ -44,6 +44,67 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import Icons from "../ui/Icons";
 
+const menuData = [
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    icon: "Home",
+    path: "/",
+  },
+  {
+    id: "sales",
+    label: "Sales",
+    icon: "ShoppingCart",
+    subItems: [
+      { id: "customer", label: "Customer", path: "/sales/customer" },
+      { id: "invoice", label: "Invoice", path: "/sales/invoice" },
+      { id: "credit-note", label: "Credit Note", path: "/sales/credit-note" },
+      { id: "receipt", label: "Receipt", path: "/sales/receipt" },
+    ],
+  },
+  {
+    id: "purchase",
+    label: "Purchase",
+    icon: "ShoppingBag",
+    subItems: [
+      { id: "vendor", label: "Vendor", path: "/purchase/vendor" },
+      { id: "purchase", label: "Purchase", path: "/purchase/purchase" },
+      { id: "debit-note", label: "Debit Note", path: "/purchase/debit-note" },
+      { id: "payment", label: "Payment", path: "/purchase/payment" },
+    ],
+  },
+  {
+    id: "reports",
+    label: "Reports",
+    icon: "PieChart",
+    subItems: [
+      { id: "sales-report", label: "Sales Report", path: "/report/sales" },
+      { id: "purchase-report", label: "Purchase Report", path: "/report/purchase" },
+      { id: "tax-report", label: "Tax Report", path: "/report/tax" },
+      { id: "profit-loss", label: "Profit & Loss", path: "/report/profit-loss", isNew: true },
+    ],
+  },
+  {
+    id: "settings",
+    label: "Settings",
+    icon: "Users",
+    path: "/settings",
+  },
+  {
+    id: "communication",
+    label: "Communication",
+    icon: "MessageSquare",
+    path: "/communication",
+  },
+  {
+    id: "help",
+    label: "Help & Support",
+    icon: "HelpCircle",
+    path: "/help",
+  },
+];
+
+
 const Sidebar = () => {
   const dispatch = useDispatch();
   const [location] = useLocation();
@@ -207,351 +268,83 @@ const Sidebar = () => {
         {/* Main Navigation */}
         <div className="flex-grow overflow-y-auto py-2">
           <ul>
-            {/* Dashboard */}
-            <li className="mb-1 px-3">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href="/">
-                    <a
-                      className={`py-2 px-2 rounded-md ${isActive("/") ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-gray-100"} flex items-center space-x-2 font-medium`}
-                    >
-                      <Home className="h-5 w-5 min-w-5" />
-                      {isExpanded && <span>Dashboard</span>}
-                    </a>
-                  </Link>
-                </TooltipTrigger>
-                {!isExpanded && (
-                  <TooltipContent side="right">Dashboard</TooltipContent>
-                )}
-              </Tooltip>
-            </li>
-
-            {/* Sales */}
-            <li className="mb-1 px-3">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div
-                    className={`py-2 px-2 rounded-md text-primarytext hover:bg-gray-100 flex items-center justify-between cursor-pointer`}
-                    onClick={() => toggleMenu("sales")}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <ShoppingCart className="h-5 w-5 min-w-5" />
-                      {isExpanded && <span>Sales</span>}
-                    </div>
-                    {isExpanded &&
-                      (expandedMenus.includes("sales") ? (
-                        <ChevronDown className="h-4 w-4" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4" />
-                      ))}
-                  </div>
-                </TooltipTrigger>
-                {!isExpanded && (
-                  <TooltipContent side="right">Sales</TooltipContent>
-                )}
-              </Tooltip>
-
-              {isExpanded && expandedMenus.includes("sales") && (
-                <ul className="pl-7 mt-1 space-y-1">
-                  <li>
-                    <Link href="/sales/customer">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/sales/customer") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm`}
+            {menuData.map((item) => (
+              <li key={item.id} className="mb-1 px-3">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    {item.subItems ? (
+                      <div
+                        className={`py-2 px-2 rounded-md text-primarytext hover:bg-gray-100 flex items-center justify-between cursor-pointer`}
+                        onClick={() => toggleMenu(item.id)}
                       >
-                        Customer
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/sales/invoice">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/sales/invoice") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm flex items-center justify-between`}
-                      >
-                        <span>Invoice</span>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-4 w-4 p-0 text-gray-400 hover:text-primary"
-                          onClick={(e) =>
-                            handlePinItem(e, {
-                              id: "invoice",
-                              path: "/sales/invoice",
-                              label: "Invoices",
-                              icon: "shopping-cart",
-                              parent: "sales",
-                            })
-                          }
-                        >
-                          <Pin className="h-3 w-3" />
-                        </Button>
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/sales/credit-note">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/sales/credit-note") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm flex items-center justify-between`}
-                      >
-                        <span>Credit Note</span>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-4 w-4 p-0 text-gray-400 hover:text-primary"
-                          onClick={(e) =>
-                            handlePinItem(e, {
-                              id: "credit-note",
-                              path: "/sales/credit-note",
-                              label: "Credit Note",
-                              icon: "shopping-cart",
-                              parent: "sales",
-                            })
-                          }
-                        >
-                          <Pin className="h-3 w-3" />
-                        </Button>
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/sales/receipt">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/sales/receipt") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm`}
-                      >
-                        Receipt
-                      </a>
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li>
-
-            {/* Purchase */}
-            <li className="mb-1 px-3">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div
-                    className={`py-2 px-2 rounded-md text-primarytext hover:bg-gray-100 flex items-center justify-between cursor-pointer`}
-                    onClick={() => toggleMenu("purchase")}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <ShoppingBag className="h-5 w-5 min-w-5" />
-                      {isExpanded && <span>Purchase</span>}
-                    </div>
-                    {isExpanded &&
-                      (expandedMenus.includes("purchase") ? (
-                        <ChevronDown className="h-4 w-4" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4" />
-                      ))}
-                  </div>
-                </TooltipTrigger>
-                {!isExpanded && (
-                  <TooltipContent side="right">Purchase</TooltipContent>
-                )}
-              </Tooltip>
-
-              {isExpanded && expandedMenus.includes("purchase") && (
-                <ul className="pl-7 mt-1 space-y-1">
-                  <li>
-                    <Link href="/purchase/vendor">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/purchase/vendor") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm`}
-                      >
-                        Vendor
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/purchase/purchase">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/purchase/purchase") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm`}
-                      >
-                        Purchase
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/purchase/debit-note">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/purchase/debit-note") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm flex items-center justify-between`}
-                      >
-                        <span>Debit Note</span>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-4 w-4 p-0 text-gray-400 hover:text-primary"
-                          onClick={(e) =>
-                            handlePinItem(e, {
-                              id: "debit-note",
-                              path: "/purchase/debit-note",
-                              label: "Debit Note",
-                              icon: "shopping-bag",
-                              parent: "purchase",
-                            })
-                          }
-                        >
-                          <Pin className="h-3 w-3" />
-                        </Button>
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/purchase/payment">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/purchase/payment") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm`}
-                      >
-                        Payment
-                      </a>
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li>
-
-            {/* Reports */}
-            <li className="mb-1 px-3">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div
-                    className={`py-2 px-2 rounded-md text-primarytext hover:bg-gray-100 flex items-center justify-between cursor-pointer`}
-                    onClick={() => toggleMenu("reports")}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <PieChart className="h-5 w-5 min-w-5" />
-                      {isExpanded && <span>Reports</span>}
-                    </div>
-                    {isExpanded &&
-                      (expandedMenus.includes("reports") ? (
-                        <ChevronDown className="h-4 w-4" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4" />
-                      ))}
-                  </div>
-                </TooltipTrigger>
-                {!isExpanded && (
-                  <TooltipContent side="right">Reports</TooltipContent>
-                )}
-              </Tooltip>
-
-              {isExpanded && expandedMenus.includes("reports") && (
-                <ul className="pl-7 mt-1 space-y-1">
-                  <li>
-                    <Link href="/report/sales">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/report/sales") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm`}
-                      >
-                        Sales Report
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/report/purchase">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/report/purchase") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm`}
-                      >
-                        Purchase Report
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/report/tax">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/report/tax") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm flex items-center justify-between`}
-                      >
-                        <span>Tax Report</span>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-4 w-4 p-0 text-gray-400 hover:text-primary"
-                          onClick={(e) =>
-                            handlePinItem(e, {
-                              id: "tax-report",
-                              path: "/report/tax",
-                              label: "Tax Report",
-                              icon: "pie-chart",
-                              parent: "reports",
-                            })
-                          }
-                        >
-                          <Pin className="h-3 w-3" />
-                        </Button>
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/report/profit-loss">
-                      <a
-                        className={`block py-1 px-2 rounded-md ${isActive("/report/profit-loss") ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"} text-sm relative`}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span>Profit & Loss</span>
-                          <div className="bg-primary text-white text-[10px] px-1 py-0.5 rounded">
-                            New
-                          </div>
+                        <div className="flex items-center space-x-2">
+                          <Icons name={item.icon} className="h-5 w-5 min-w-5" />
+                          {isExpanded && <span>{item.label}</span>}
                         </div>
-                      </a>
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li>
+                        {isExpanded && (
+                          expandedMenus.includes(item.id) ? (
+                            <ChevronDown className="h-4 w-4" />
+                          ) : (
+                            <ChevronRight className="h-4 w-4" />
+                          )
+                        )}
+                      </div>
+                    ) : (
+                      <Link href={item.path || "/"}>
+                        <a
+                          className={`py-2 px-2 rounded-md ${isActive(item.path || "/") ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-gray-100"} flex items-center space-x-2`}
+                        >
+                          <Icons name={item.icon} className="h-5 w-5 min-w-5" />
+                          {isExpanded && <span>{item.label}</span>}
+                        </a>
+                      </Link>
+                    )}
+                  </TooltipTrigger>
+                  {!isExpanded && (
+                    <TooltipContent side="right">{item.label}</TooltipContent>
+                  )}
+                </Tooltip>
 
-            {/* Settings */}
-            <li className="mb-1 px-3">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href="/settings">
-                    <a
-                      className={`py-2 px-2 rounded-md ${isActive("/settings") ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-gray-100"} flex items-center space-x-2`}
-                    >
-                      <Users className="h-5 w-5 min-w-5" />
-                      {isExpanded && <span>Settings</span>}
-                    </a>
-                  </Link>
-                </TooltipTrigger>
-                {!isExpanded && (
-                  <TooltipContent side="right">Settings</TooltipContent>
+                {isExpanded && item.subItems && expandedMenus.includes(item.id) && (
+                  <ul className="pl-7 mt-1 space-y-1">
+                    {item.subItems.map((subItem) => (
+                      <li key={subItem.id}>
+                        <Link href={subItem.path}>
+                          <a
+                            className={`block py-1 px-2 rounded-md ${
+                              isActive(subItem.path) ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"
+                            } text-sm flex items-center justify-between`}
+                          >
+                            <span>{subItem.label}</span>
+                            {subItem.isNew && (
+                              <div className="bg-primary text-white text-[10px] px-1 py-0.5 rounded">
+                                New
+                              </div>
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-4 w-4 p-0 text-gray-400 hover:text-primary"
+                              onClick={(e) =>
+                                handlePinItem(e, {
+                                  id: subItem.id,
+                                  path: subItem.path,
+                                  label: subItem.label,
+                                  icon: item.icon,
+                                  parent: item.id,
+                                })
+                              }
+                            >
+                              <Pin className="h-3 w-3" />
+                            </Button>
+                          </a>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 )}
-              </Tooltip>
-            </li>
-
-            {/* Communication */}
-            <li className="mb-1 px-3">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href="/communication">
-                    <a
-                      className={`py-2 px-2 rounded-md ${isActive("/communication") ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-gray-100"} flex items-center space-x-2`}
-                    >
-                      <MessageSquare className="h-5 w-5 min-w-5" />
-                      {isExpanded && <span>Communication</span>}
-                    </a>
-                  </Link>
-                </TooltipTrigger>
-                {!isExpanded && (
-                  <TooltipContent side="right">Communication</TooltipContent>
-                )}
-              </Tooltip>
-            </li>
-
-            {/* Help */}
-            <li className="mb-1 px-3">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href="/help">
-                    <a
-                      className={`py-2 px-2 rounded-md ${isActive("/help") ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-gray-100"} flex items-center space-x-2`}
-                    >
-                      <HelpCircle className="h-5 w-5 min-w-5" />
-                      {isExpanded && <span>Help & Support</span>}
-                    </a>
-                  </Link>
-                </TooltipTrigger>
-                {!isExpanded && (
-                  <TooltipContent side="right">Help & Support</TooltipContent>
-                )}
-              </Tooltip>
-            </li>
+              </li>
+            ))}
           </ul>
         </div>
 
