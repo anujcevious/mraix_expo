@@ -1,5 +1,5 @@
-import React from 'react';
-import * as LucideIcons from 'lucide-react';
+import React from "react";
+import * as LucideIcons from "lucide-react";
 
 export type IconName = keyof typeof LucideIcons;
 
@@ -9,7 +9,7 @@ interface IconProps {
   size?: number;
 }
 
-const Icons: React.FC<IconProps> = ({ name, className = '', size = 24 }) => {
+const Icons: React.FC<IconProps> = ({ name, className = "", size = 18 }) => {
   const IconComponent = LucideIcons[name];
 
   if (!IconComponent) {

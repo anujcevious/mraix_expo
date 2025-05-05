@@ -79,9 +79,18 @@ const menuData = [
     icon: "PieChart",
     subItems: [
       { id: "sales-report", label: "Sales Report", path: "/report/sales" },
-      { id: "purchase-report", label: "Purchase Report", path: "/report/purchase" },
+      {
+        id: "purchase-report",
+        label: "Purchase Report",
+        path: "/report/purchase",
+      },
       { id: "tax-report", label: "Tax Report", path: "/report/tax" },
-      { id: "profit-loss", label: "Profit & Loss", path: "/report/profit-loss", isNew: true },
+      {
+        id: "profit-loss",
+        label: "Profit & Loss",
+        path: "/report/profit-loss",
+        isNew: true,
+      },
     ],
   },
   {
@@ -103,7 +112,6 @@ const menuData = [
     path: "/help",
   },
 ];
-
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -208,9 +216,9 @@ const Sidebar = () => {
               aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
             >
               {isExpanded ? (
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-2 w-2" />
               ) : (
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-2 w-2" />
               )}
             </Button>
           </div>
@@ -238,7 +246,9 @@ const Sidebar = () => {
                           className={`py-1 px-2 rounded-md ${isActive(item.path) ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-light-bg-color"} flex items-center space-x-2 mb-1`}
                         >
                           {renderMenuIcon(item.icon)}
-                          {isExpanded && <span>{item.label}</span>}
+                          {isExpanded && (
+                            <span className="text-sm">{item.label}</span>
+                          )}
                           {isExpanded && (
                             <Button
                               variant="ghost"
@@ -246,7 +256,7 @@ const Sidebar = () => {
                               className="ml-auto p-0 h-4 w-4 text-primary"
                               onClick={(e) => handlePinItem(e, item)}
                             >
-                              <Pin className="h-3 w-3" />
+                              <Pin className="h-3 w-3 mr-auto bg-yellow" />
                             </Button>
                           )}
                         </a>
@@ -278,24 +288,29 @@ const Sidebar = () => {
                         onClick={() => toggleMenu(item.id)}
                       >
                         <div className="flex items-center space-x-2">
-                          <Icons name={item.icon} className="h-5 w-5 min-w-5" />
-                          {isExpanded && <span>{item.label}</span>}
+                          <Icons name={item.icon} />
+                          {isExpanded && (
+                            <span className="text-sm text-primarytext">
+                              {item.label}
+                            </span>
+                          )}
                         </div>
-                        {isExpanded && (
-                          expandedMenus.includes(item.id) ? (
-                            <ChevronDown className="h-4 w-4" />
+                        {isExpanded &&
+                          (expandedMenus.includes(item.id) ? (
+                            <ChevronDown className="h-3 w-3" />
                           ) : (
-                            <ChevronRight className="h-4 w-4" />
-                          )
-                        )}
+                            <ChevronRight className="h-3 w-3" />
+                          ))}
                       </div>
                     ) : (
                       <Link href={item.path || "/"}>
                         <a
                           className={`py-2 px-2 rounded-md ${isActive(item.path || "/") ? "bg-light-bg-color text-primary" : "text-primarytext hover:bg-gray-100"} flex items-center space-x-2`}
                         >
-                          <Icons name={item.icon} className="h-5 w-5 min-w-5" />
-                          {isExpanded && <span>{item.label}</span>}
+                          <Icons name={item.icon} />
+                          {isExpanded && (
+                            <span className="text-sm">{item.label}</span>
+                          )}
                         </a>
                       </Link>
                     )}
@@ -305,44 +320,48 @@ const Sidebar = () => {
                   )}
                 </Tooltip>
 
-                {isExpanded && item.subItems && expandedMenus.includes(item.id) && (
-                  <ul className="pl-7 mt-1 space-y-1">
-                    {item.subItems.map((subItem) => (
-                      <li key={subItem.id}>
-                        <Link href={subItem.path}>
-                          <a
-                            className={`block py-1 px-2 rounded-md ${
-                              isActive(subItem.path) ? "bg-light-bg-color text-primary" : "text-secondarytext hover:bg-gray-100"
-                            } text-sm flex items-center justify-between`}
-                          >
-                            <span>{subItem.label}</span>
-                            {subItem.isNew && (
-                              <div className="bg-primary text-white text-[10px] px-1 py-0.5 rounded">
-                                New
-                              </div>
-                            )}
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-4 w-4 p-0 text-gray-400 hover:text-primary"
-                              onClick={(e) =>
-                                handlePinItem(e, {
-                                  id: subItem.id,
-                                  path: subItem.path,
-                                  label: subItem.label,
-                                  icon: item.icon,
-                                  parent: item.id,
-                                })
-                              }
+                {isExpanded &&
+                  item.subItems &&
+                  expandedMenus.includes(item.id) && (
+                    <ul className="pl-7 mt-1 space-y-1">
+                      {item.subItems.map((subItem) => (
+                        <li key={subItem.id}>
+                          <Link href={subItem.path}>
+                            <a
+                              className={`block py-1 px-2 rounded-md ${
+                                isActive(subItem.path)
+                                  ? "bg-light-bg-color text-primary"
+                                  : "text-secondarytext hover:bg-gray-100"
+                              } text-sm flex items-center justify-between`}
                             >
-                              <Pin className="h-3 w-3" />
-                            </Button>
-                          </a>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                              <span>{subItem.label}</span>
+                              {subItem.isNew && (
+                                <div className="bg-primary text-white text-[10px] px-1 py-0.5 rounded">
+                                  New
+                                </div>
+                              )}
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-4 w-4 p-0 text-gray-400 hover:text-primary"
+                                onClick={(e) =>
+                                  handlePinItem(e, {
+                                    id: subItem.id,
+                                    path: subItem.path,
+                                    label: subItem.label,
+                                    icon: item.icon,
+                                    parent: item.id,
+                                  })
+                                }
+                              >
+                                <Pin className="h-3 w-3" />
+                              </Button>
+                            </a>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
               </li>
             ))}
           </ul>
@@ -350,10 +369,10 @@ const Sidebar = () => {
 
         {/* User Profile & App Version */}
         {isExpanded && (
-          <div className="p-4 border-t border-border">
+          <div className="p-2 border-t border-border">
             <div className="bg-background rounded-lg p-3">
-              <div className="flex items-start">
-                <Icons name="HelpCircle" className="h-5 w-5 text-primary" />
+              <div className="flex gap-2 items-start">
+                <Icons name="HelpCircle" className="text-primary" />
                 <div>
                   <h4 className="text-sm font-medium">Need help?</h4>
                   <p className="text-xs text-gray-500 mt-1">
