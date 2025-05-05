@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useLocation } from "wouter";
+import env from "@/config/env";
+import { loginSchema, registerSchema, otpSchema } from "@shared/authSchema";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { Button } from "@/components/ui/button";
@@ -93,10 +95,18 @@ export default function AuthPage() {
   const onLoginSubmit = async (data: LoginFormValues) => {
     try {
       dispatch(loginStart());
-      const response = await apiRequest("POST", "/api/auth/login", data);
+      const validatedData = loginSchema.parse(data);
+      
+      const response = await fetch(`${env.API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(validatedData),
+      });
+      
       const result = await response.json();
 
       if (response.ok) {
+        localStorage.setItem(env.AUTH_TOKEN_KEY, result.token);
         dispatch(loginSuccess(result));
         setLocation("/");
       } else {
@@ -112,7 +122,14 @@ export default function AuthPage() {
   const onRegisterSubmit = async (data: RegisterFormValues) => {
     try {
       dispatch(registerStart());
-      const response = await apiRequest("POST", "/api/auth/register", data);
+      const validatedData = registerSchema.parse(data);
+      
+      const response = await fetch(`${env.API_BASE_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(validatedData),
+      });
+      
       const result = await response.json();
 
       if (response.ok) {
@@ -120,19 +137,46 @@ export default function AuthPage() {
         setRegisteredEmail(data.email);
         setShowOTPVerification(true);
         toast({
-          title: "Success",
-          description: "Registration successful! Please verify your email.",
+          title: "Success", 
+          description: "Registration successful! Please verify your email."
         });
       } else {
         throw new Error(result.message || "Registration failed");
       }
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Registration failed";
+      const message = error instanceof Error ? error.message : "Registration failed";
       dispatch(registerFailure(message));
       toast({ title: "Error", description: message, variant: "destructive" });
     }
   };
+
+  const handleVerifyOTP = useCallback(async (otp: string) => {
+    try {
+      const validatedData = otpSchema.parse({ email: registeredEmail, otp });
+      
+      const response = await fetch(`${env.API_BASE_URL}/api/auth/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(validatedData),
+      });
+      
+      const result = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: "Email verified successfully! Please login."
+        });
+        setShowOTPVerification(false);
+        setMode("login");
+      } else {
+        throw new Error(result.message || "OTP verification failed");
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "OTP verification failed";
+      toast({ title: "Error", description: message, variant: "destructive" });
+    }
+  }, [registeredEmail, toast, setMode]);
 
   return (
     <div className="min-h-screen flex">
