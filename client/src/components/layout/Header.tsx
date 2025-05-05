@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {
   Bell,
@@ -53,7 +54,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
 
   return (
     <header className="bg-white border-b border-gray-200 py-3 px-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-      {/* Left: Company Name for Mobile / Logo + Dropdown for Desktop */}
+      {/* Left side */}
       <div className="flex items-center">
         {isMobile ? (
           <div className="flex items-center">
@@ -63,55 +64,58 @@ const Header = ({ onMenuClick }: HeaderProps) => {
             <span className="ml-2 font-semibold text-primarytext">MrAix Expo</span>
           </div>
         ) : (
-        <div className={`flex items-center w-[14rem]`}>
-          <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
-            M
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="ml-2 flex justify-between w-[11rem]  items-center cursor-pointer hover:text-primary transition-colors">
-                <span className="font-semibold text-primarytext">
-                  MrAix Expo
-                </span>
-                <ChevronDown className="ml-1 h-4 w-4" />
+          <>
+            <div className="flex items-center w-[14rem]">
+              <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
+                M
               </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>Your Companies</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="flex items-center">
-                <Building2 className="mr-2 h-4 w-4 text-primary" />
-                <span className="font-medium">MrAix Expo</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center opacity-60">
-                <Building2 className="mr-2 h-4 w-4" />
-                <span>Company Two</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center opacity-60">
-                <Building2 className="mr-2 h-4 w-4" />
-                <span>Company Three</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <span className="text-primary">+ Add New Company</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        {/* Center: Search bar */}
-        <div className="flex-1 w-[30rem] hidden md:block">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-            />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          </div>
-        </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="ml-2 flex justify-between w-[11rem] items-center cursor-pointer hover:text-primary transition-colors">
+                    <span className="font-semibold text-primarytext">
+                      MrAix Expo
+                    </span>
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>Your Companies</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="flex items-center">
+                    <Building2 className="mr-2 h-4 w-4 text-primary" />
+                    <span className="font-medium">MrAix Expo</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="flex items-center opacity-60">
+                    <Building2 className="mr-2 h-4 w-4" />
+                    <span>Company Two</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="flex items-center opacity-60">
+                    <Building2 className="mr-2 h-4 w-4" />
+                    <span>Company Three</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <span className="text-primary">+ Add New Company</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            {/* Search bar - only show on desktop */}
+            <div className="flex-1 w-[30rem]">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Right: Controls */}
+      {/* Right side */}
       <div className="flex items-center space-x-4">
         {isMobile && (
           <Button
@@ -123,7 +127,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
             <Menu className="h-5 w-5" />
           </Button>
         )}
-        {/* Period Selector */}
+        {/* Period Selector - desktop only */}
         <div className="hidden md:block">
           <div className="flex items-center border border-gray-200 rounded-lg px-2 py-1 text-sm">
             <span className="text-secondarytext ml-1">Apr 2023</span>
@@ -169,12 +173,10 @@ const Header = ({ onMenuClick }: HeaderProps) => {
         </Button>
       </div>
 
-      {/* Notification Popup */}
+      {/* Popups */}
       {showNotifications && (
         <NotificationPopup onClose={() => setShowNotifications(false)} />
       )}
-
-      {/* User Profile Popup */}
       {showUserProfile && (
         <UserProfilePopup
           onClose={() => setShowUserProfile(false)}
