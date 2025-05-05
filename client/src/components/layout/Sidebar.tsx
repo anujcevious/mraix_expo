@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import { RootState } from "../../../../store/store";
 import { toggleSidebar, collapseSidebar } from "../../../../store/silce/sidebarSlice";
 import {
-  addFavorite,
-  removeFavorite,
-  MenuItem,
-} from "@/lib/slices/favoritesSlice";
+  toggleFavorite,
+} from "../../../../store/silce/favoritesSlice";
 import {
   ChevronRight,
   ChevronLeft,
