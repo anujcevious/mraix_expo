@@ -23,9 +23,14 @@ import {
 import NotificationPopup from "@/components/popups/NotificationPopup";
 import UserProfilePopup from "@/components/popups/UserProfilePopup";
 
-const Header = () => {
+interface HeaderProps {
+  onMenuClick: () => void;
+}
+
+const Header = ({ onMenuClick }: HeaderProps) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
+  const isMobile = useIsMobile();
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
@@ -46,9 +51,19 @@ const Header = () => {
 
   return (
     <header className="bg-white border-b border-gray-200 py-3 px-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-      {/* Left: Company Logo with Dropdown */}
-      <div className="flex">
-        <div className="flex w-[14rem] items-center">
+      {/* Left: Menu Toggle and Logo */}
+      <div className="flex items-center">
+        {isMobile && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="mr-2"
+            onClick={onMenuClick}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+        )}
+        <div className={`flex items-center ${isMobile ? 'w-auto' : 'w-[14rem]'}`}>
           <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
             M
           </div>

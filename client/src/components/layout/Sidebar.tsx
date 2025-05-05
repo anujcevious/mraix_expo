@@ -31,7 +31,12 @@ import Icons from "../ui/Icons";
 
 import { menuData } from "@/lib/menudata";
 
-const Sidebar = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const dispatch = useDispatch();
   const [location] = useLocation();
   const { isExpanded } = useSelector((state: RootState) => state.sidebar);
@@ -90,8 +95,8 @@ const Sidebar = () => {
 
   // Determine which classes to use based on mobile vs desktop state
   const sidebarClasses = isMobile
-    ? `bg-white border-r border-gray-200 h-full shadow-md flex flex-col ${isMobileOpen ? "sidebar-mobile-open sidebar-expanded" : "sidebar-mobile-closed"}`
-    : `relative bg-white border-r border-gray-200 h-full transition-all duration-300 ease-in-out shadow-md flex flex-col ${isExpanded ? "sidebar-expanded" : "sidebar-collapsed"}`;
+    ? `fixed bg-white border-r border-gray-200 h-full shadow-md flex flex-col z-50 transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"} ${isExpanded ? "w-60" : "w-16"}`
+    : `relative bg-white border-r border-gray-200 h-full transition-all duration-300 ease-in-out shadow-md flex flex-col ${isExpanded ? "w-60" : "w-16"}`;
 
   return (
     <>
