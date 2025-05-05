@@ -4,7 +4,8 @@ import { useState, FormEvent } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { loginUser, registerUser, verifyOtp } from "../store/auth/authSlice";
+import { loginStart, loginSuccess, loginFailure } from "@/lib/slices/authSlice";
+import { loginUser, registerUser, verifyOtp } from "@/lib/slices/authSlice";
 import { toast } from "react-hot-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import OTPVerificationPopup from "@/components/popups/OTPVerificationPopup";
@@ -49,22 +50,28 @@ export default function AuthPage() {
     }
 
     try {
-      const result = await dispatch(
-        loginUser({
-          identifier: formData.email,
+      dispatch(loginStart());
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
           password: formData.password,
         }),
-      ).unwrap();
-
-      console.log(result, "resultlogin>>");
-
-      if (result.status) {
+      });
+      
+      const data = await response.json();
+      
+      if (data.status) {
+        dispatch(loginSuccess({ user: data.user, token: data.token }));
         toast.success("Login successful!");
         await router.push("/");
       } else {
+        dispatch(loginFailure(data.message || "Login failed"));
         toast.error("Login failed. Please check your credentials.");
       }
     } catch (error) {
+      dispatch(loginFailure("Login failed"));
       console.error("Login error:", error);
       toast.error("Login failed");
     }
