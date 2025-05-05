@@ -48,6 +48,7 @@ export default function AuthPage() {
   };
 
   const handleLogin = async () => {
+    console.log("handleLogin called");
     if (!formData.email || !formData.password) {
       toast.error("Please fill in all required fields.");
       return;
@@ -55,12 +56,15 @@ export default function AuthPage() {
 
     try {
       setIsLoading(true);
+      console.log("Login result:");
+
       const result = await dispatch(
         loginUser({
           identifier: formData.email,
           password: formData.password,
-        })
+        }),
       ).unwrap();
+      console.log("Login result:", result);
 
       if (result.status) {
         toast.success("Login successful!");

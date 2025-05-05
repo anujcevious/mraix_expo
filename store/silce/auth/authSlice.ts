@@ -132,7 +132,8 @@ export const loginUser = createAsyncThunk(
   async (credentials: LoginPayload, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
+        `https://host.mraix.com/api/v2/auth/login
+`,
         {
           method: "POST",
           headers: {
@@ -203,5 +204,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, loginStart, loginSuccess, loginFailure } = authSlice.actions;
+export const { logout, loginStart, loginSuccess, loginFailure } =
+  authSlice.actions;
 export default authSlice.reducer;
