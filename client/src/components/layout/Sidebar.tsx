@@ -139,11 +139,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           <div id="favorites-container" className="text-sm">
             {favorites.length > 0
               ? favorites.map((item) => (
-                  <Tooltip key={item.id}>
+                  <Tooltip key={item.href}>
                     <TooltipTrigger asChild>
-                      <Link href={item.path}>
+                      <Link href={item.href}>
                         <a
-                          className={`py-1 flex justify-between px-2 rounded-md ${isActive(item.path) ? "bg-primary text-white font-semibold" : "text-primarytext hover:bg-primary/5"} flex items-center space-x-2 mb-1`}
+                          className={`py-1 flex justify-between px-2 rounded-md ${isActive(item.href) ? "bg-primary text-white font-semibold" : "text-primarytext hover:bg-primary/5"} flex items-center space-x-2 mb-1`}
                         >
                           <div className="flex gap-2">
                             <Icons name={item.icon} />
