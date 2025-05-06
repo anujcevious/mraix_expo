@@ -1,69 +1,46 @@
-import { useLocation } from "wouter";
-import { ChevronRight } from "lucide-react";
-import { Link } from "wouter";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-
-interface BreadcrumbItemType {
-  label: string;
-  href?: string;
-}
+import React from "react";
+import Icons from "./Icons";
+import Button from "./Button";
 
 interface BreadcrumbsProps {
-  items?: BreadcrumbItemType[];
-  className?: string;
+  items: { label: string; href: string }[];
+  actionButton?: {
+    label: string;
+    onClick: () => void;
+    icon?: string;
+  };
 }
 
-export default function Breadcrumbs({ items, className = "" }: BreadcrumbsProps) {
-  const [location] = useLocation();
-
-  if (!items || items.length === 0) {
-    // Generate breadcrumb items based on current path
-    const pathSegments = location.split("/").filter(Boolean);
-    items = [{ label: "Home", href: "/" }];
-
-    let currentPath = "";
-    pathSegments.forEach((segment) => {
-      currentPath += `/${segment}`;
-      items.push({
-        label:
-          segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " "),
-        href: currentPath,
-      });
-    });
-  }
-
+const Breadcrumbs = ({ items, actionButton }: BreadcrumbsProps) => {
   return (
-    <Breadcrumb className={`mb-4 ${className}`}>
-      <BreadcrumbList className="text-xs">
-        {items.map((item, index) => {
-          const isLast = index === items.length - 1;
-          return (
-            <BreadcrumbItem key={index}>
-              {!isLast ? (
-                <BreadcrumbLink asChild>
-                  <Link href={item.href || "/"}>
-                    <span className="text-primary hover:text-primary/80">
-                      {item.label}
-                    </span>
-                  </Link>
-                </BreadcrumbLink>
-              ) : (
-                <BreadcrumbPage className="text-secondarytext">
-                  {item.label}
-                </BreadcrumbPage>
-              )}
-              {!isLast && <BreadcrumbSeparator />}
-            </BreadcrumbItem>
-          );
-        })}
-      </BreadcrumbList>
-    </Breadcrumb>
+    <div className="flex justify-between items-center mb-6">
+      <div className="flex items-center space-x-2 text-xs text-secondarytext">
+        {items?.map((item, index) => (
+          <React.Fragment key={item.href}>
+            <a href={item.href} className="hover:text-primary">
+              {item.label}
+            </a>
+            {index < items.length - 1 && (
+              <Icons
+                name="chevronRight"
+                onClick={() => {}}
+                className="text-secondarytext"
+              />
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+      {actionButton && (
+        <Button
+          onClick={actionButton.onClick}
+          iconName={actionButton.icon}
+          iconPosition="left"
+        >
+          {actionButton.label}
+        </Button>
+      )}
+    </div>
   );
-}
+};
+
+export default Breadcrumbs;

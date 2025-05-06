@@ -108,40 +108,6 @@ const Customer = () => {
   return (
     <div>
       <PageLayout title="Customer">
-        {/* Breadcrumb */}
-        <div className="flex items-center text-sm mb-4">
-          <Link href="/">
-            <a className="text-primary">Home</a>
-          </Link>
-          <ChevronRight className="h-4 w-4 text-gray-400 mx-2" />
-          <Link href="/sales">
-            <a className="text-primary">Sales</a>
-          </Link>
-          <ChevronRight className="h-4 w-4 text-gray-400 mx-2" />
-          <span className="text-secondarytext">Customer</span>
-        </div>
-
-        {/* Page Title & Actions */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-          <h1 className="text-xl font-semibold text-primarytext">Customers</h1>
-          <div className="flex space-x-2 mt-2 sm:mt-0">
-            <div className="relative">
-              <Button variant="outline" className="flex items-center space-x-2">
-                <Filter className="h-4 w-4 text-secondarytext" />
-                <span>Filter</span>
-                <ChevronDown className="h-4 w-4 text-secondarytext" />
-              </Button>
-            </div>
-            <Button
-              onClick={handleCreateCustomer}
-              className="flex items-center"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              <span>Add Customer</span>
-            </Button>
-          </div>
-        </div>
-
         {/* Customer Table */}
         <Card className="overflow-hidden">
           {/* Table Filter/Search */}

@@ -1,53 +1,56 @@
-
 import React from "react";
+import { cn } from "../../lib/utils";
 import Icons from "./Icons";
-import { cn } from "@/lib/utils";
-
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost";
   size?: "default" | "sm" | "lg" | "icon";
   isLoading?: boolean;
-  iconname?: string;
-  iconposition?: "left" | "right";
+  iconName?: string;
+  iconPosition?: "left" | "right";
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ 
-    className, 
-    variant = "primary", 
-    size = "default", 
-    isLoading,
-    iconname,
-    iconposition = "left",
-    children,
-    ...props 
-  }, ref) => {
-    const baseStyles = "inline-flex items-center justify-center rounded-md text-xs transition-colors focus:outline-none disabled:opacity-50";
+  (
+    {
+      className,
+      variant = "primary",
+      size = "default",
+      isLoading,
+      iconName,
+      iconPosition = "left",
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const baseStyles =
+      "inline-flex items-center justify-center rounded-md text-xs transition-colors focus:outline-none disabled:opacity-50";
 
     const variants = {
       primary: "bg-primary text-white hover:bg-primary/90",
       secondary: "border border-outlinecolor hover:bg-gray-50",
-      outline: "border border-input bg-white hover:bg-accent hover:text-accent-foreground",
-      ghost: "hover:bg-accent hover:text-accent-foreground"
+      outline:
+        "border border-input bg-white hover:bg-accent hover:text-accent-foreground",
+      ghost: "hover:bg-accent hover:text-accent-foreground",
     };
 
     const sizes = {
       default: "h-10 px-4 py-2",
       sm: "h-8 px-3 py-1",
       lg: "h-12 px-6 py-3",
-      icon: "h-10 w-10"
+      icon: "h-10 w-10",
     };
 
     const renderIcon = () => {
-      if (!iconname) return null;
+      if (!iconName) return null;
       return (
         <Icons
-          name={iconname}
+          name={iconName}
           onClick={() => {}}
           size={16}
           className={cn(
             "inline-block",
-            children ? (iconposition === "left" ? "mr-2" : "ml-2") : ""
+            children ? (iconPosition === "left" ? "mr-2" : "ml-2") : "",
           )}
         />
       );
@@ -63,12 +66,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading && (
           <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
         )}
-        {iconposition === "left" && renderIcon()}
+        {iconPosition === "left" && renderIcon()}
         {children}
-        {iconposition === "right" && renderIcon()}
+        {iconPosition === "right" && renderIcon()}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

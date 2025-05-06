@@ -39,6 +39,7 @@ export default function PageLayout({
         <Heading
           title={title || "Godowns"}
           items={breadcrumbs?.items || defaultBreadcrumbs.items}
+          actionButton={breadcrumbs?.actionButton}
         />
         {actionButton ? (
           <Button
