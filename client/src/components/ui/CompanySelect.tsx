@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { FiChevronDown, FiSearch } from "react-icons/fi";
-import { useAppSelector } from "../../../../store/store";
+import { useAppSelector } from "../../../../store/silce/hooks";
 import { getAllCompany } from "store/silce/companySlice";
 
 interface Company {
