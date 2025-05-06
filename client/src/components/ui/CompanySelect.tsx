@@ -35,27 +35,29 @@ const CompanySelect = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex items-center w-[11rem] cursor-pointer hover:text-primary transition-colors">
-          <div className="bg-primary rounded-full h-8 w-12 flex items-center justify-center text-white font-semibold">
+        <div className="flex items-center w-[13rem] cursor-pointer hover:text-primary transition-colors">
+          <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
             {activeCompany?.name?.[0] || "M"}
           </div>
-          <div className="ml-2 flex justify-between w-full items-center">
+          <div className="ml-2 flex justify-between items-center">
             <span className="font-semibold text-primarytext truncate">
-              {(activeCompany?.name || "MrAix Expo").length > 15 
-                ? `${(activeCompany?.name || "MrAix Expo").slice(0, 15)}...` 
-                : (activeCompany?.name || "MrAix Expo")}
+              {(activeCompany?.name || "MrAix Expo").length > 10
+                ? `${(activeCompany?.name || "MrAix Expo").slice(0, 14)}...`
+                : activeCompany?.name || "MrAix Expo"}
             </span>
             <ChevronDown className="ml-1 h-4 w-4" />
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 max-h-[300px] overflow-y-auto">
-        <DropdownMenuLabel className="sticky top-0 bg-white z-10 font-semibold">Your Companies</DropdownMenuLabel>
+      <DropdownMenuContent className="w-56 absolute top-0 max-h-[300px] overflow-y-auto">
+        <DropdownMenuLabel className="sticky top-0 bg-white z-10">
+          Your Companies
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {companies?.map((company: any) => (
           <DropdownMenuItem
             key={company.id}
-            className={`flex items-center hover:bg-gray-100 ${company.id === activeCompany?.id ? 'bg-gray-50' : ''}`}
+            className={`flex items-center hover:bg-gray-100 ${company.id === activeCompany?.id ? "bg-gray-50" : ""}`}
             onClick={() => handleCompanySelect(company)}
           >
             <Building2
