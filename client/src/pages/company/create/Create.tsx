@@ -124,6 +124,41 @@ const Create = () => {
           });
           break;
         case 'business-details':
+          if (!formData.companyName) {
+            toast({
+              variant: "destructive",
+              description: "Please enter company name"
+            });
+            return false;
+          }
+          if (!formData.gstRegistrationType) {
+            toast({
+              variant: "destructive",
+              description: "Please select GST registration type"
+            });
+            return false;
+          }
+          if (!formData.registrationNumber) {
+            toast({
+              variant: "destructive",
+              description: "Please enter registration number"
+            });
+            return false;
+          }
+          if (!formData.businessPAN) {
+            toast({
+              variant: "destructive",
+              description: "Please enter business PAN"
+            });
+            return false;
+          }
+          if (!formData.businessTAN) {
+            toast({
+              variant: "destructive",
+              description: "Please enter business TAN"
+            });
+            return false;
+          }
           businessDetailsSchema.parse({
             companyName: formData.companyName,
             gstRegistrationType: formData.gstRegistrationType,
