@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "wouter";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { useAppSelector } from "../../../../store/silce/hooks";
@@ -14,12 +14,12 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const dispatch = useDispatch<AppDispatch>();
-  const pathname = usePathname();
+  const [pathname] = useLocation();
 
   const isExpanded = useAppSelector((state) => state.globalSetting.isExpanded);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const isAuthPage = usePathname()?.startsWith("/auth");
+  const isAuthPage = pathname.startsWith("/auth");
 
   useEffect(() => {
     const handleResize = () => {
