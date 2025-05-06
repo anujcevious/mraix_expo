@@ -10,7 +10,7 @@ interface HeadingProps {
   items?: { label: string; href: string }[];
 }
 
-const Heading = ({
+export const Heading = ({
   title,
   description,
   className,
