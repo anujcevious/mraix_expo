@@ -179,12 +179,30 @@ const Create = () => {
           });
           break;
         case 'public-details':
-          publicDetailsSchema.parse({
-            website: formData.website,
-            supportEmail: formData.supportEmail,
-            supportPhone: formData.supportPhone,
-            description: formData.description
-          });
+          if (!formData.description) {
+            toast({
+              variant: "destructive",
+              description: "Please enter company description"
+            });
+            return false;
+          }
+          try {
+            publicDetailsSchema.parse({
+              website: formData.website || "",
+              supportEmail: formData.supportEmail || "",
+              supportPhone: formData.supportPhone || "",
+              description: formData.description
+            });
+            return true;
+          } catch (error: any) {
+            if (error.errors) {
+              toast({
+                variant: "destructive",
+                description: error.errors[0].message
+              });
+            }
+            return false;
+          }
           break;
       }
       return true;
