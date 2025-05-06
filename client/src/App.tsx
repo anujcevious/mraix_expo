@@ -37,15 +37,14 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
-      <Create />
-
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <TooltipProvider>
-            <Toaster />
-            <Switch>
-              {routes.map((route) => (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" defaultTheme="light">
+        <TooltipProvider>
+          <Toaster />
+          <Switch>
+            <Route path="/company/create" component={Create} />
+            {routes.map((route) => (
+              route.path !== "/company/create" && (
                 <Route
                   key={route.path}
                   path={route.path}
@@ -57,12 +56,12 @@ function App() {
                     )
                   }
                 />
-              ))}
-            </Switch>
-          </TooltipProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </>
+              )
+            ))}
+          </Switch>
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
