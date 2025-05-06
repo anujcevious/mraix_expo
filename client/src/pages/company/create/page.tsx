@@ -1,6 +1,4 @@
-"use client";
 
-"use client";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateCompanyData, createCompany } from "@/store/silce/companySlice";

@@ -4,9 +4,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { loginSuccess } from '../../store/silce/auth/authSlice';
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { loginSuccess } from "../../store/silce/auth/authSlice";
 import NotFound from "@/pages/not-found";
 import Auth from "@/pages/auth";
 import Dashboard from "@/pages/Dashboard";
@@ -26,33 +26,43 @@ function Router() {
     <Switch>
       {/* Auth Route */}
       <Route path="/auth" component={Auth} />
-      
+
       {/* Protected Routes */}
       <Route path="/">
         <ProtectedLayout>
           <Dashboard />
         </ProtectedLayout>
       </Route>
-      
+
+      {/* Company Create Route */}
+      <Route path="/auth" component={Auth} />
+
+      {/* Protected Routes */}
+      <Route path="/company/create">
+        {/* <ProtectedLayout>
+          <Dashboard />
+        </ProtectedLayout> */}
+      </Route>
+
       {/* Sales Routes */}
       <Route path="/sales/customer">
         <ProtectedLayout>
           <Customer />
         </ProtectedLayout>
       </Route>
-      
+
       <Route path="/sales/invoice">
         <ProtectedLayout>
           <Invoice />
         </ProtectedLayout>
       </Route>
-      
+
       <Route path="/sales/credit-note">
         <ProtectedLayout>
           <CreditNote />
         </ProtectedLayout>
       </Route>
-      
+
       <Route path="/sales/receipt">
         <ProtectedLayout>
           <Receipt />
@@ -65,19 +75,19 @@ function Router() {
           <Vendor />
         </ProtectedLayout>
       </Route>
-      
+
       <Route path="/purchase/purchase">
         <ProtectedLayout>
           <Purchase />
         </ProtectedLayout>
       </Route>
-      
+
       <Route path="/purchase/debit-note">
         <ProtectedLayout>
           <DebitNote />
         </ProtectedLayout>
       </Route>
-      
+
       <Route path="/purchase/payment">
         <ProtectedLayout>
           <Payment />
@@ -99,25 +109,25 @@ function Router() {
 
 function App() {
   const dispatch = useDispatch();
-  
+
   // For development/testing only: Set a mock user
   useEffect(() => {
     const mockUser = {
       user: {
         id: 1,
-        username: 'admin',
-        name: 'Admin User',
-        email: 'admin@example.com',
-        role: 'admin',
+        username: "admin",
+        name: "Admin User",
+        email: "admin@example.com",
+        role: "admin",
         lastLogin: new Date().toISOString(),
-        avatar: ''
+        avatar: "",
       },
-      token: 'mock-token-12345'
+      token: "mock-token-12345",
     };
-    
+
     dispatch(loginSuccess(mockUser));
   }, [dispatch]);
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light">
