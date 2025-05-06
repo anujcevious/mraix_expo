@@ -20,8 +20,11 @@ const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   useEffect(() => {
     if (!isAuthenticated) {
       setLocation("/auth");
+    } else if (location === "/") {
+      // Only redirect to home if explicitly at root
+      setLocation("/dashboard");
     }
-  }, [isAuthenticated, setLocation]);
+  }, [isAuthenticated, setLocation, location]);
 
   if (!isAuthenticated) {
     return null;
