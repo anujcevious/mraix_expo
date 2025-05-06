@@ -3,12 +3,11 @@ import { useState } from "react";
 import {
   Bell,
   Settings,
-  ChevronDown,
   Search,
   Calendar,
-  Building2,
   Menu,
 } from "lucide-react";
+import CompanySelect from "@/components/ui/CompanySelect";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
@@ -61,39 +60,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
         ) : (
           <>
             <div className="flex items-center w-[14rem]">
-              <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
-                M
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <div className="ml-2 flex justify-between w-[11rem] items-center cursor-pointer hover:text-primary transition-colors">
-                    <span className="font-semibold text-primarytext">
-                      MrAix Expo
-                    </span>
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuLabel>Your Companies</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="flex items-center">
-                    <Building2 className="mr-2 h-4 w-4 text-primary" />
-                    <span className="font-medium">MrAix Expo</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="flex items-center opacity-60">
-                    <Building2 className="mr-2 h-4 w-4" />
-                    <span>Company Two</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="flex items-center opacity-60">
-                    <Building2 className="mr-2 h-4 w-4" />
-                    <span>Company Three</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <span className="text-primary">+ Add New Company</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <CompanySelect />
             </div>
             {/* Search bar - only show on desktop */}
             <div className="flex-1 w-[30rem]">
