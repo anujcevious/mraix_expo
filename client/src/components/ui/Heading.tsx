@@ -1,3 +1,6 @@
+
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 import Breadcrumbs from "./Breadcrumbs";
 
 interface HeadingProps {
@@ -7,7 +10,7 @@ interface HeadingProps {
   items?: { label: string; href: string }[];
 }
 
-export function Heading({
+export default function Heading({
   title,
   description,
   className,
