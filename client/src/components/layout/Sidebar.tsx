@@ -241,6 +241,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                               } text-sm flex items-center justify-between`}
                             >
                               <span className="text-xs">{subItem.label}</span>
+                              {(isExpanded || isMobile) && (
+                                <span className="text-xs">{subItem.label}</span>
+                              )}
                               {subItem.isNew && (
                                 <div className="bg-primary text-white text-[10px] px-1 py-0.5 rounded">
                                   New
