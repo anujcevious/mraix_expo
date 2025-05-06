@@ -14,20 +14,22 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const mockUser = {
-      user: {
-        id: 1,
-        username: "admin",
-        name: "Admin User",
-        email: "admin@example.com",
-        role: "admin",
-        lastLogin: new Date().toISOString(),
-        avatar: "",
-      },
-      token: "mock-token-12345",
-    };
-
-    dispatch(loginSuccess(mockUser));
+    const token = localStorage.getItem("token");
+    if (token && !isAuthenticated) {
+      const mockUser = {
+        user: {
+          id: 1,
+          username: "admin",
+          name: "Admin User",
+          email: "admin@example.com",
+          role: "admin",
+          lastLogin: new Date().toISOString(),
+          avatar: "",
+        },
+        token: token
+      };
+      dispatch(loginSuccess(mockUser));
+    }
   }, [dispatch]);
 
   return (

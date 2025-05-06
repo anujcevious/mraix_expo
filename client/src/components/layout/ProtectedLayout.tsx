@@ -18,15 +18,15 @@ const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    const token = localStorage.getItem("token");
+    if (!isAuthenticated && !token) {
       setLocation("/auth");
     } else if (location === "/") {
-      // Only redirect to home if explicitly at root
       setLocation("/dashboard");
     }
   }, [isAuthenticated, setLocation, location]);
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !localStorage.getItem("token")) {
     return null;
   }
 
