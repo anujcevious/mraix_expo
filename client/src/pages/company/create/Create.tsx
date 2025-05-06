@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateCompanyData, createCompany } from "@/store/silce/companySlice";
+import { updateCompanyData, createCompany } from "../../../../store/silce/companySlice";
 import { Heading } from "@/components/ui/Heading";
 import { Country, State } from "country-state-city";
 import SelectField from "@/components/ui/SelectField";
