@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/lib/store";
+import { fetchUserByEmail, getAllCompany } from "../../../../store/silce/companySlice";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
