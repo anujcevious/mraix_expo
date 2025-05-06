@@ -6,17 +6,10 @@ import {
   toggleSidebar,
   collapseSidebar,
 } from "../../../../store/silce/sidebarSlice";
-import { toggleFavorite } from "../../../../store/silce/favoritesSlice";
 import {
   ChevronRight,
   ChevronLeft,
   ChevronDown,
-  Home,
-  ShoppingCart,
-  ShoppingBag,
-  PieChart,
-  Users,
-  MessageSquare,
   Pin,
 } from "lucide-react";
 import Button from "@/components/ui/Button";
@@ -39,7 +32,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const [location] = useLocation();
-  const { isExpanded } = useSelector((state: RootState) => state.sidebar);
+  // const { isExpanded } = useSelector((state: RootState) => state.sidebar);
+  const isExpanded = true;
+  console.log(isExpanded, "isExpanded");
   const { items: favorites } = useSelector(
     (state: RootState) => state.favorites,
   );
