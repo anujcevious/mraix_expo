@@ -41,26 +41,29 @@ const CompanySelect = () => {
           </div>
           <div className="ml-2 flex justify-between w-full items-center">
             <span className="font-semibold text-primarytext truncate">
-              {activeCompany?.name || "MrAix Expo"}
+              {(activeCompany?.name || "MrAix Expo").length > 15 
+                ? `${(activeCompany?.name || "MrAix Expo").slice(0, 15)}...` 
+                : (activeCompany?.name || "MrAix Expo")}
             </span>
             <ChevronDown className="ml-1 h-4 w-4" />
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Your Companies</DropdownMenuLabel>
+      <DropdownMenuContent className="w-56 max-h-[300px] overflow-y-auto">
+        <DropdownMenuLabel className="sticky top-0 bg-white z-10 font-semibold">Your Companies</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {companies?.map((company: any) => (
           <DropdownMenuItem
             key={company.id}
-            className="flex items-center"
+            className={`flex items-center hover:bg-gray-100 ${company.id === activeCompany?.id ? 'bg-gray-50' : ''}`}
             onClick={() => handleCompanySelect(company)}
           >
             <Building2
-              className={`mr-2 h-4 w-4 ${company.id === activeCompany?.id ? "text-primary" : ""}`}
+              className={`mr-2 h-4 w-4 ${company.id === activeCompany?.id ? "text-primary" : "text-gray-500"}`}
             />
             <span
-              className={`text-xs ${company.id === activeCompany?.id ? "" : ""}`}
+              className={`text-sm ${company.id === activeCompany?.id ? "text-primary font-medium" : "text-gray-700"}`}
+              title={company.name}
             >
               {company.name}
             </span>
