@@ -4,7 +4,7 @@ import { updateCompanyData, createCompany } from "@/store/silce/companySlice";
 import { Heading } from "@/components/ui/Heading";
 import { Country, State } from "country-state-city";
 import SelectField from "@/components/ui/SelectField";
-import { useRouter } from "next/navigation";
+import { useLocation } from "wouter";
 import InputField from "@/components/ui/InputField";
 import { buttonVariants } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
@@ -12,7 +12,7 @@ import Icons from "@/components/ui/Icons";
 //import SelectField from "@/components/ui/SelectField";  // Assuming this is where SelectField is located.  Adjust path as needed.
 
 const Create = () => {
-  const router = useRouter();
+  const [location, setLocation] = useLocation();
   const dispatch = useDispatch();
   const [step, setStep] = useState("business-type");
   const steps = [
@@ -269,7 +269,7 @@ const Create = () => {
           <div className="flex items-center space-x-4">
             <Button
               onClick={() => {
-                router.back();
+                window.history.back();
               }}
               variant="ghost"
               iconName={"logout"}
