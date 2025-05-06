@@ -107,50 +107,7 @@ export default function AuthPage() {
     }
   };
 
-  const handleRegister = async () => {
-    if (
-      !formData.email ||
-      !formData.password ||
-      !formData.name ||
-      !formData.phone ||
-      !formData.companyName ||
-      !acceptTerms
-    ) {
-      toast.error("Please fill in all required fields and accept terms.");
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          password: formData.password,
-          companyname: formData.companyName,
-          ispartner: false,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.status) {
-        setShowOtpModal(true);
-        toast.success(
-          "Registration successful! Please verify OTP sent to your email.",
-        );
-      } else {
-        toast.error(data.message || "Registration failed");
-      }
-    } catch (error) {
-      console.error("Registration error:", error);
-      toast.error("Registration failed");
-    }
-  };
+  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
