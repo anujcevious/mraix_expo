@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import  Button  from '@/components/ui/Button';
+import Button from '@/components/ui/Button';
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import {
-  InputOTP,
-} from "@/components/ui/input-otp";
+import { InputOTP } from "@/components/ui/input-otp";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/lib/store";
+import { verifyOtp } from "../../../../store/silce/auth/authSlice";
 
 interface OTPVerificationPopupProps {
   email: string;
@@ -17,34 +18,28 @@ interface OTPVerificationPopupProps {
 const OTPVerificationPopup = ({
   email,
   onClose,
-  onVerified,
+  isOpen
 }: OTPVerificationPopupProps) => {
   const { toast } = useToast();
   const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleVerify = async () => {
+    if (!otp || otp.length !== 6) {
+      toast({ title: "Error", description: "Please enter a valid 6-digit OTP" });
+      return;
+    }
+
     try {
       setIsLoading(true);
-      const response = await fetch("/api/auth/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp }),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        toast({ title: "Success", description: result.message });
-        onVerified();
-      } else {
-        throw new Error(result.message);
-      }
-    } catch (error) {
+      await dispatch(verifyOtp({ email, verificationcode: otp })).unwrap();
+      toast({ title: "Success", description: "OTP verified successfully" });
+      onClose();
+    } catch (error: any) {
       toast({
         title: "Error",
-        description:
-          error instanceof Error ? error.message : "Failed to verify OTP",
+        description: error || "Failed to verify OTP",
         variant: "destructive",
       });
     } finally {
@@ -52,24 +47,7 @@ const OTPVerificationPopup = ({
     }
   };
 
-  const handleResend = async () => {
-    try {
-      const response = await fetch("/api/auth/resend-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const result = await response.json();
-      toast({ title: "Success", description: result.message });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to resend OTP",
-        variant: "destructive",
-      });
-    }
-  };
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -101,14 +79,6 @@ const OTPVerificationPopup = ({
                 disabled={otp.length !== 6 || isLoading}
               >
                 {isLoading ? "Verifying..." : "Verify OTP"}
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full"
-                onClick={handleResend}
-                disabled={isLoading}
-              >
-                Resend OTP
               </Button>
             </div>
           </div>

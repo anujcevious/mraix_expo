@@ -171,4 +171,5 @@ const authSlice = createSlice({
 
 export const { logout, loginStart, loginSuccess, loginFailure } =
   authSlice.actions;
+export { verifyOtp };
 export default authSlice.reducer;
