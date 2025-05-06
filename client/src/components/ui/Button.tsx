@@ -6,8 +6,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost";
   size?: "default" | "sm" | "lg" | "icon";
   isLoading?: boolean;
-  iconName?: string;
-  iconPosition?: "left" | "right";
+  iconname?: string;
+  iconposition?: "left" | "right";
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -16,8 +16,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     variant = "primary", 
     size = "default", 
     isLoading,
-    iconName,
-    iconPosition = "left",
+    iconname,
+    iconposition = "left",
     children,
     ...props 
   }, ref) => {
@@ -38,15 +38,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const renderIcon = () => {
-      if (!iconName) return null;
+      if (!iconname) return null;
       return (
         <Icons
-          name={iconName}
+          name={iconname}
           onClick={() => {}}
           size={16}
           className={cn(
             "inline-block",
-            children ? (iconPosition === "left" ? "mr-2" : "ml-2") : ""
+            children ? (iconposition === "left" ? "mr-2" : "ml-2") : ""
           )}
         />
       );
@@ -62,9 +62,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading && (
           <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
         )}
-        {iconPosition === "left" && renderIcon()}
+        {iconposition === "left" && renderIcon()}
         {children}
-        {iconPosition === "right" && renderIcon()}
+        {iconposition === "right" && renderIcon()}
       </button>
     );
   }
