@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import Button from '@/components/ui/Button';
+import Button from "@/components/ui/Button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { InputOTP } from "@/components/ui/input-otp";
@@ -18,7 +18,7 @@ interface OTPVerificationPopupProps {
 const OTPVerificationPopup = ({
   email,
   onClose,
-  isOpen
+  isOpen,
 }: OTPVerificationPopupProps) => {
   const { toast } = useToast();
   const [otp, setOtp] = useState("");
@@ -27,7 +27,10 @@ const OTPVerificationPopup = ({
 
   const handleVerify = async () => {
     if (!otp || otp.length !== 6) {
-      toast({ title: "Error", description: "Please enter a valid 6-digit OTP" });
+      toast({
+        title: "Error",
+        description: "Please enter a valid 6-digit OTP",
+      });
       return;
     }
 

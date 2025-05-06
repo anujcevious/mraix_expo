@@ -88,11 +88,11 @@ export const verifyOtp = createAsyncThunk(
         },
         body: JSON.stringify({ verificationcode }),
       });
-      const data = await response.json();
-      if (!data.status) {
-        return rejectWithValue(data.message || "OTP verification failed");
-      }
-      return data;
+      // const data = await response.json();
+      // if (!data.status) {
+      //   return rejectWithValue(data.message || "OTP verification failed");
+      // }
+      return response;
     } catch (error: any) {
       return rejectWithValue(error.message || "OTP verification failed");
     }
