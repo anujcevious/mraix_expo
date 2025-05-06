@@ -16,6 +16,13 @@ import {
 const CompanySelect = () => {
   const dispatch = useDispatch();
   const { companies, activeCompany } = useSelector((state: RootState) => state.company);
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (user?.email && !companies.length) {
+      dispatch(getAllCompany(user.email));
+    }
+  }, [dispatch, user?.email, companies.length]);
 
   const handleCompanySelect = (company: any) => {
     dispatch(setActiveCompany(company));

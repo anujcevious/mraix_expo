@@ -13,9 +13,17 @@ interface ProtectedLayoutProps {
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
   const [, setLocation] = useLocation();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (isAuthenticated && user?.email) {
+      dispatch(fetchUserByEmail(user.email));
+      dispatch(getAllCompany(user.email));
+    }
+  }, [dispatch, isAuthenticated, user?.email]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

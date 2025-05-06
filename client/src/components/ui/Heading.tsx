@@ -15,9 +15,13 @@ export function Heading({
   className,
   items,
 }: HeadingProps) {
+  const { user } = useSelector((state: RootState) => state.auth);
   return (
     <div className="space-y-1">
-      <h2 className="text-lg font-bold text-black">{title}</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-lg font-bold text-black">{title}</h2>
+        {user?.name && <span className="text-sm text-gray-600">Welcome, {user.name}</span>}
+      </div>
       {description && (
         <p className={`${className}text-xs text-secondarygraycolor`}>
           {description}
