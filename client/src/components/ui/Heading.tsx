@@ -1,3 +1,4 @@
+
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
 import Breadcrumbs from "./Breadcrumbs";
@@ -5,32 +6,23 @@ import Breadcrumbs from "./Breadcrumbs";
 interface HeadingProps {
   title: string;
   description?: string;
-  actionButton?: string;
-  className?: string;
   items?: { label: string; href: string }[];
 }
 
-export const Heading = ({
-  title,
-  description,
-  actionButton,
-  className,
-  items,
-}: HeadingProps) => {
+export function Heading({ title, description, items }: HeadingProps) {
   const { user } = useSelector((state: RootState) => state.auth);
+  
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-bold text-black">{title}</h2>
+    <div className="space-y-2">
+      <div className="flex flex-col gap-1">
+        <h2 className="text-2xl font-semibold text-gray-900">{title}</h2>
+        {description && (
+          <p className="text-sm text-gray-500">{description}</p>
+        )}
       </div>
-      {description && (
-        <p className={`${className}text-xs text-secondarygraycolor`}>
-          {description}
-        </p>
-      )}
-      {items && <Breadcrumbs items={items} actionButton={actionButton} />}
+      {items && <Breadcrumbs items={items} />}
     </div>
   );
-};
+}
 
 export default Heading;

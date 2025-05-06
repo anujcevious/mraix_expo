@@ -107,7 +107,18 @@ const Customer = () => {
 
   return (
     <div>
-      <PageLayout title="Customer">
+      <PageLayout 
+        title="Customer"
+        breadcrumbs={[
+          { label: "Sales", href: "/sales" },
+          { label: "Customers", href: "/sales/customers" }
+        ]}
+        actionButton={{
+          label: "Create Customer",
+          onClick: handleCreateCustomer,
+          icon: "plus"
+        }}
+      >
         {/* Customer Table */}
         <Card className="overflow-hidden">
           {/* Table Filter/Search */}
