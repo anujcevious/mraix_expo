@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateCompanyData, createCompany } from "@/store/silce/companySlice";
@@ -12,7 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import Icons from "@/components/ui/Icons";
 //import SelectField from "@/components/ui/SelectField";  // Assuming this is where SelectField is located.  Adjust path as needed.
 
-export default function Page() {
+const Create = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [step, setStep] = useState("business-type");
@@ -877,4 +876,6 @@ export default function Page() {
       </main>
     </div>
   );
-}
+};
+
+export default Create;
