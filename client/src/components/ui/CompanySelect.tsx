@@ -63,10 +63,7 @@ const CompanySelect = () => {
             <Building2
               className={`mr-2 h-4 w-4 ${company.id === activeCompany?.id ? "text-primary" : "text-gray-500"}`}
             />
-            <span
-              className={`text-sm ${company.id === activeCompany?.id ? "text-primary font-medium" : "text-gray-700"}`}
-              title={company.name}
-            >
+            <span className={`text-xs`} title={company.name}>
               {company.name}
             </span>
           </DropdownMenuItem>

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { logout } from "../../../../store/silce/auth/authSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import SearchBox from "../ui/SearchBox";
 import Button from "@/components/ui/Button";
 import {
   DropdownMenu,
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import NotificationPopup from "@/components/popups/NotificationPopup";
 import UserProfilePopup from "@/components/popups/UserProfilePopup";
+import SearchBox from "../ui/SearchBox";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -56,16 +58,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
               <CompanySelect />
             </div>
             {/* Search bar - only show on desktop */}
-            <div className="flex-1 w-[30rem]">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-lg focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
-                />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              </div>
-            </div>
+            <SearchBox />
           </>
         )}
       </div>
