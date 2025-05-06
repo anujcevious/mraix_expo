@@ -1,19 +1,16 @@
+
 import { useState, useEffect } from "react";
-import { Building2, ChevronDown } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
+import { setActiveCompany, getAllCompany } from "../../../../store/silce/companySlice";
 import {
-  setActiveCompany,
-  getAllCompany,
-} from "../../../../store/silce/companySlice";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const CompanySelect = () => {
   const dispatch = useDispatch();
@@ -21,6 +18,7 @@ const CompanySelect = () => {
     (state: RootState) => state.company,
   );
   const { user } = useSelector((state: RootState) => state.auth);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (user?.email && !companies.length) {
@@ -30,55 +28,69 @@ const CompanySelect = () => {
 
   const handleCompanySelect = (company: any) => {
     dispatch(setActiveCompany(company));
+    setIsOpen(false);
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
         <div className="flex items-center w-[13rem] cursor-pointer hover:text-primary transition-colors">
           <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
             {activeCompany?.name?.[0] || "M"}
           </div>
-          <div className="ml-2 flex justify-between items-center">
+          <div className="ml-2 flex justify-between w-full items-center">
             <span className="font-semibold text-primarytext truncate">
-              {(activeCompany?.name || "MrAix Expo").length > 10
-                ? `${(activeCompany?.name || "MrAix Expo").slice(0, 14)}...`
-                : activeCompany?.name || "MrAix Expo"}
+              {(activeCompany?.name || "MrAix Expo").length > 15 
+                ? `${(activeCompany?.name || "MrAix Expo").slice(0, 15)}...` 
+                : (activeCompany?.name || "MrAix Expo")}
             </span>
-            <ChevronDown className="ml-1 h-4 w-4" />
           </div>
         </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 absolute top-0 max-h-[300px] overflow-y-auto">
-        <DropdownMenuLabel className="sticky top-0 bg-white z-10">
-          Your Companies
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {companies?.map((company: any) => (
-          <DropdownMenuItem
-            key={company.id}
-            className={`flex items-center hover:bg-gray-100 ${company.id === activeCompany?.id ? "bg-gray-50" : ""}`}
-            onClick={() => handleCompanySelect(company)}
-          >
-            <Building2
-              className={`mr-2 h-4 w-4 ${company.id === activeCompany?.id ? "text-primary" : "text-gray-500"}`}
-            />
-            <span
-              className={`text-sm ${company.id === activeCompany?.id ? "text-primary font-medium" : "text-gray-700"}`}
-              title={company.name}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Select Company</DialogTitle>
+        </DialogHeader>
+        <div className="max-h-[60vh] overflow-y-auto pr-6">
+          <div className="space-y-2">
+            {companies?.map((company: any) => (
+              <button
+                key={company.id}
+                className={`w-full flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors ${
+                  company.id === activeCompany?.id ? "bg-gray-50" : ""
+                }`}
+                onClick={() => handleCompanySelect(company)}
+              >
+                <Building2
+                  className={`mr-3 h-5 w-5 ${
+                    company.id === activeCompany?.id ? "text-primary" : "text-gray-500"
+                  }`}
+                />
+                <span
+                  className={`text-sm ${
+                    company.id === activeCompany?.id
+                      ? "text-primary font-medium"
+                      : "text-gray-700"
+                  }`}
+                  title={company.name}
+                >
+                  {company.name}
+                </span>
+              </button>
+            ))}
+            <button
+              className="w-full p-3 text-sm text-primary hover:bg-gray-100 rounded-lg transition-colors"
+              onClick={() => {
+                setIsOpen(false);
+                window.location.href = "/company/create";
+              }}
             >
-              {company.name}
-            </span>
-          </DropdownMenuItem>
-        ))}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => (window.location.href = "/company/create")}
-        >
-          <span className="text-xs text-primary">+ Add New Company</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+              + Add New Company
+            </button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
