@@ -104,6 +104,20 @@ const Create = () => {
     try {
       switch(currentStep) {
         case 'business-type':
+          if (!formData.typeOfBusiness) {
+            toast({
+              variant: "destructive",
+              description: "Please select a business type"
+            });
+            return false;
+          }
+          if (!formData.businessLocation) {
+            toast({
+              variant: "destructive",
+              description: "Please select a business location"
+            });
+            return false;
+          }
           businessTypeSchema.parse({
             typeOfBusiness: formData.typeOfBusiness,
             businessLocation: formData.businessLocation
