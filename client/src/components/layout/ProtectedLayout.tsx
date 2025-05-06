@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { useAppSelector } from "../store/hooks";
+import { useAppSelector } from "../../../../store/silce/hooks";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store/store";
-import { fetchUserByEmail, getAllCompany } from "../store/companySlice";
+import { AppDispatch } from "../../../../store/store";
+import { fetchUserByEmail, getAllCompany } from "../../../../store/silce/companySlice";
 
 export default function ClientLayout({
   children,
