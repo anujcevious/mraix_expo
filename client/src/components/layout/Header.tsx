@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import NotificationPopup from "@/components/popups/NotificationPopup";
 import UserProfilePopup from "@/components/popups/UserProfilePopup";
-import SearchBox from "../ui/SearchBox";
 
 interface HeaderProps {
   onMenuClick: () => void;
