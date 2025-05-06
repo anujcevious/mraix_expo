@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import ProtectedLayout from "@/components/layout/ProtectedLayout";
 import Auth from "@/pages/auth";
 import Dashboard from "@/pages/Dashboard";
+import Create from "@/pages/company/create/Create";
 import Customer from "@/pages/sales/Customer";
 import Invoice from "@/pages/sales/Invoice";
 import CreditNote from "@/pages/sales/CreditNote";
@@ -28,6 +29,11 @@ export const routes: RouteConfig[] = [
   {
     path: "/",
     component: <Dashboard />,
+    protected: true,
+  },
+  {
+    path: "/company/create",
+    component: <Create />,
     protected: true,
   },
   {
