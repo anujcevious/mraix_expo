@@ -1,6 +1,6 @@
 
 import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
+import { RootState } from "../../../../store/store";
 import Breadcrumbs from "./Breadcrumbs";
 
 interface HeadingProps {

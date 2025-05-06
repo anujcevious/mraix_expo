@@ -32,7 +32,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const [location] = useLocation();
-  const isExpanded = useSelector((state: RootState) => state.globalSetting.isExpanded);
+  const isExpanded = useSelector((state: RootState) => state.globalSetting?.isExpanded ?? true);
   const { items: favorites } = useSelector(
     (state: RootState) => state.favorites,
   );

@@ -10,9 +10,36 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-interface BreadcrumbItem {
+interface BreadcrumbItemType {
   label: string;
   href?: string;
+}
+
+interface BreadcrumbsProps {
+  items?: BreadcrumbItemType[];
+}
+
+export default function Breadcrumbs({ items }: BreadcrumbsProps) {
+  if (!items?.length) return null;
+  
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        {items.map((item, index) => (
+          <BreadcrumbItem key={index}>
+            {item.href ? (
+              <Link href={item.href}>
+                <span className="text-primary">{item.label}</span>
+              </Link>
+            ) : (
+              <BreadcrumbPage>{item.label}</BreadcrumbPage>
+            )}
+            {index < items.length - 1 && <BreadcrumbSeparator />}
+          </BreadcrumbItem>
+        ))}
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
 }
 
 interface BreadcrumbsProps {
