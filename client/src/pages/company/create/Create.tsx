@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateCompanyData, createCompany } from "../../../../store/silce/companySlice";
 import { Heading } from "@/components/ui/Heading";
 import { Country, State } from "country-state-city";
 import SelectField from "@/components/ui/SelectField";
@@ -9,7 +8,7 @@ import InputField from "@/components/ui/InputField";
 import { buttonVariants } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import Icons from "@/components/ui/Icons";
-//import SelectField from "@/components/ui/SelectField";  // Assuming this is where SelectField is located.  Adjust path as needed.
+import { createCompany,updateCompanyData } from "store/silce/companySlice";
 
 const Create = () => {
   const [location, setLocation] = useLocation();
