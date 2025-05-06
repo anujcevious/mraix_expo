@@ -15,7 +15,7 @@ import {
   Printer
 } from 'lucide-react';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/card';
 import {
   Table,
