@@ -8,7 +8,7 @@ import InputField from "@/components/ui/InputField";
 import { buttonVariants } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import Icons from "@/components/ui/Icons";
-import { createCompany,updateCompanyData } from "store/silce/companySlice";
+import { createCompany, updateCompanyData } from "../../../../store/silce/companySlice";
 
 const Create = () => {
   const [location, setLocation] = useLocation();
