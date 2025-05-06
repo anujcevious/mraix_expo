@@ -159,18 +159,28 @@ const Create = () => {
             });
             return false;
           }
-          businessDetailsSchema.parse({
-            companyName: formData.companyName,
-            gstRegistrationType: formData.gstRegistrationType,
-            registrationNumber: formData.registrationNumber,
-            businessPAN: formData.businessPAN,
-            businessTAN: formData.businessTAN,
-            address: formData.address,
-            country: formData.country,
-            state: formData.state,
-            city: formData.city,
-            pincode: formData.pincode
-          });
+          try {
+            businessDetailsSchema.parse({
+              companyName: formData.companyName,
+              gstRegistrationType: formData.gstRegistrationType,
+              registrationNumber: formData.registrationNumber,
+              businessPAN: formData.businessPAN,
+              businessTAN: formData.businessTAN,
+              address: formData.address || "",
+              country: formData.country || "",
+              state: formData.state || "",
+              city: formData.city || "",
+              pincode: formData.pincode || ""
+            });
+          } catch (validationError: any) {
+            if (validationError.errors) {
+              toast({
+                variant: "destructive",
+                description: validationError.errors[0].message
+              });
+            }
+            return false;
+          }
           break;
         case 'representative':
           representativeSchema.parse({
