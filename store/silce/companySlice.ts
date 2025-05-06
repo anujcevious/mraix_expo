@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { env } from "@/config/env";
 
 // Types
 interface Address {
@@ -159,7 +160,7 @@ export const fetchUserByEmail = createAsyncThunk(
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/getUserByEmail/${email}`,
+        `${env.API_BASE_URL}/auth/getUserByEmail/${email}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -178,7 +179,7 @@ export const getAllCompany = createAsyncThunk(
   async (email: string) => {
     const token = localStorage.getItem("token");
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/company/getAllCompaniesByEmail?email=anujkumar@cevious.com
+      `${env.API_BASE_URL}/company/getAllCompaniesByEmail?email=anujkumar@cevious.com
 `,
       {
         headers: {
