@@ -46,20 +46,20 @@ const CompanySelect = () => {
   );
 
   return (
-    <div className="relative w-[12rem]" ref={dropdownRef}>
+    <div className="relative w-[13rem]" ref={dropdownRef}>
       <div
         className="relative group cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="relative flex items-center space-x-2">
-          <div className="flex items-center space-x-2 bg-secondary/5 px-3 py-1.5 rounded-full hover:bg-primary/5 w-full">
-            <div className="w-9 h-6 bg-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-xs font-semibold text-white">
+          <div className="flex items-center space-x-2 px- py-1.5 rounded-full hover:bg-primary/5 w-full">
+            <div className="w-12 h-8  bg-primary rounded-full flex items-center justify-center">
+              <span className="text-md  font-semibold text-white">
                 {getFirstLetter(selectedCompany?.name)}
               </span>
             </div>
-            <span className="text-xs w-full justify-between text-gray-600 truncate ">
-              {selectedCompany?.name || "IHJA"}
+            <span className="text-sm font-semibold w-full justify-between text-primary truncate ">
+              {selectedCompany?.name || "MrAix Expo"}
             </span>
             <div className="mr-auto">
               <FiChevronDown

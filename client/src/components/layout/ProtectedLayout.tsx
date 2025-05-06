@@ -1,55 +1,102 @@
-
-import { useEffect, useState } from "react";
-import { useLocation } from "wouter";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/lib/store";
-import { fetchUserByEmail, getAllCompany } from "../../../../store/silce/companySlice";
+"use client";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useAppSelector } from "../store/hooks";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/store";
+import { fetchUserByEmail, getAllCompany } from "../store/companySlice";
 
-interface ProtectedLayoutProps {
+export default function ClientLayout({
+  children,
+}: {
   children: React.ReactNode;
-}
+}) {
+  const dispatch = useDispatch<AppDispatch>();
+  const pathname = usePathname();
 
-const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
-  const [, setLocation] = useLocation();
-  const dispatch = useDispatch();
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const isExpanded = useAppSelector((state) => state.globalSetting.isExpanded);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const [isMobile, setIsMobile] = useState(false);
+  const isAuthPage = usePathname()?.startsWith("/auth");
 
   useEffect(() => {
-    if (isAuthenticated && user?.email) {
-      dispatch(fetchUserByEmail(user.email));
-      dispatch(getAllCompany(user.email));
-    }
-  }, [dispatch, isAuthenticated, user?.email]);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth >= 768) {
+        setIsSidebarOpen(true);
+      } else {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!isAuthenticated && !token) {
-      setLocation("/auth");
-    } else if (location === "/") {
-      setLocation("/dashboard");
-    }
-  }, [isAuthenticated, setLocation, location]);
+    dispatch(fetchUserByEmail("anujkumar@cevious.com"));
+  }, [dispatch]);
 
-  if (!isAuthenticated && !localStorage.getItem("token")) {
-    return null;
+  useEffect(() => {
+    dispatch(getAllCompany("anujkumar@cevious.com"));
+  }, [dispatch]);
+
+  // Don't show layout for company create page
+  if (pathname === "/company/create") {
+    return <>{children}</>;
   }
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      <Header onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} className="px-4 h-14" />
-      <div className="flex flex-1 overflow-hidden relative">
-        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-        <main className={`flex-1 overflow-y-auto bg-gray-50 p-4 md:p-5 ${isMobile && isSidebarOpen ? 'opacity-50 pointer-events-none' : ''}`}>
-          {children}
-        </main>
-      </div>
-    </div>
-  );
-};
+    <>
+      {isAuthPage ? (
+        children
+      ) : (
+        <div className="relative h-[100vh]">
+          <div className="fixed bg-white my-auto border-b border-b-slate-200 h-[10vh] top-0 w-[100%]  z-20">
+            <Header onMenuClick={toggleSidebar} isMobile={isMobile} />
+          </div>
+          <div className="flex mt-[10vh] h-[90vh]">
+            {/* Overlay for mobile */}
+            {isMobile && isSidebarOpen && (
+              <div
+                className="fixed inset-0 bg-black/50 z-30"
+                onClick={() => setIsSidebarOpen(false)}
+              />
+            )}
 
-export default ProtectedLayout;
+            {/* Sidebar */}
+            <div
+              className={`fixed bg-white ${isMobile && "top-0 z-40"} left-0 transition-transform duration-300 ease-in-out ${
+                isMobile
+                  ? `w-[80%] h-full transform ${
+                      isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                    }`
+                  : `${!isExpanded ? "w-[5%] " : "w-[20%]"} h-[90vh]`
+              }`}
+            >
+              <Sidebar isMobile={isMobile} isSidebarOpen={isSidebarOpen} />
+            </div>
+
+            {/* Main content */}
+            <main
+              className={`transition-all duration-300 ease-in-out ${
+                isMobile
+                  ? "w-full p-4"
+                  : `${isExpanded ? "w-[80%] ml-[20%]" : "w-[95%] ml-[5%]"} "m-auto p-5 bg-green-200"`
+              }`}
+            >
+              {children}
+            </main>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
