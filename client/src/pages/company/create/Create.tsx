@@ -93,9 +93,72 @@ const Create = () => {
     }));
   };
 
+  import { 
+    businessTypeSchema, 
+    businessDetailsSchema, 
+    representativeSchema, 
+    publicDetailsSchema 
+  } from '../../../../shared/companyValidationSchema';
+  import { toast } from 'react-hot-toast';
+
+  const validateStep = (currentStep: string) => {
+    try {
+      switch(currentStep) {
+        case 'business-type':
+          businessTypeSchema.parse({
+            typeOfBusiness: formData.typeOfBusiness,
+            businessLocation: formData.businessLocation
+          });
+          break;
+        case 'business-details':
+          businessDetailsSchema.parse({
+            companyName: formData.companyName,
+            gstRegistrationType: formData.gstRegistrationType,
+            registrationNumber: formData.registrationNumber,
+            businessPAN: formData.businessPAN,
+            businessTAN: formData.businessTAN,
+            address: formData.address,
+            country: formData.country,
+            state: formData.state,
+            city: formData.city,
+            pincode: formData.pincode
+          });
+          break;
+        case 'representative':
+          representativeSchema.parse({
+            representativeName: formData.representativeName,
+            position: formData.position,
+            email: formData.email,
+            phone: formData.phone
+          });
+          break;
+        case 'public-details':
+          publicDetailsSchema.parse({
+            website: formData.website,
+            supportEmail: formData.supportEmail,
+            supportPhone: formData.supportPhone,
+            description: formData.description
+          });
+          break;
+      }
+      return true;
+    } catch (error: any) {
+      if (error.errors) {
+        error.errors.forEach((err: any) => {
+          toast.error(err.message);
+        });
+      }
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (!validateStep(step)) {
+        return;
+      }
+
       if (step === "review") {
         const apiData = {
           name: "Company Name rthykt45r",
