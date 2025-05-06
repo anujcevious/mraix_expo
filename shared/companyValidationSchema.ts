@@ -14,11 +14,11 @@ export const businessDetailsSchema = z.object({
   registrationNumber: z.string().min(1, "Registration number is required"),
   businessPAN: z.string().min(10, "Valid PAN number is required"),
   businessTAN: z.string().min(10, "Valid TAN number is required"),
-  address: z.string().min(5, "Address is required"),
-  country: z.string().min(1, "Country is required"),
-  state: z.string().min(1, "State is required"),
-  city: z.string().min(1, "City is required"),
-  pincode: z.string().min(6, "Valid pincode is required"),
+  address: z.string().optional(),
+  country: z.string().optional(),
+  state: z.string().optional(),
+  city: z.string().optional(),
+  pincode: z.string().optional(),
 });
 
 // Step 3: Representative Validation

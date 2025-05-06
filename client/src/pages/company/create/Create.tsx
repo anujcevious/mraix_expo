@@ -159,29 +159,16 @@ const Create = () => {
             });
             return false;
           }
-          try {
-            businessDetailsSchema.parse({
-              companyName: formData.companyName,
-              gstRegistrationType: formData.gstRegistrationType,
-              registrationNumber: formData.registrationNumber,
-              businessPAN: formData.businessPAN,
-              businessTAN: formData.businessTAN,
-              address: formData.address,
-              country: formData.country,
-              state: formData.state,
-              city: formData.city,
-              pincode: formData.pincode
-            });
-            return true;
-          } catch (validationError: any) {
-            if (validationError.errors) {
-              toast({
-                variant: "destructive",
-                description: validationError.errors[0].message
-              });
-            }
-            return false;
-          }
+          // Only validate required fields
+          const requiredFields = {
+            companyName: formData.companyName,
+            gstRegistrationType: formData.gstRegistrationType,
+            registrationNumber: formData.registrationNumber,
+            businessPAN: formData.businessPAN,
+            businessTAN: formData.businessTAN
+          };
+
+          return true;
           break;
         case 'representative':
           representativeSchema.parse({
