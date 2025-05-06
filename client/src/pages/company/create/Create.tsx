@@ -166,12 +166,13 @@ const Create = () => {
               registrationNumber: formData.registrationNumber,
               businessPAN: formData.businessPAN,
               businessTAN: formData.businessTAN,
-              address: formData.address || "",
-              country: formData.country || "",
-              state: formData.state || "",
-              city: formData.city || "",
-              pincode: formData.pincode || ""
+              address: formData.address,
+              country: formData.country,
+              state: formData.state,
+              city: formData.city,
+              pincode: formData.pincode
             });
+            return true;
           } catch (validationError: any) {
             if (validationError.errors) {
               toast({
