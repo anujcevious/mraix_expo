@@ -8,16 +8,9 @@ import { logout } from "../../../../store/silce/auth/authSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import SearchBox from "../ui/SearchBox";
 import Button from "@/components/ui/Button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import NotificationPopup from "@/components/popups/NotificationPopup";
 import UserProfilePopup from "@/components/popups/UserProfilePopup";
+import PeriodSelect from "../ui/PeriodSelect";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -57,7 +50,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
               <CompanySelect />
             </div>
             {/* Search bar - only show on desktop */}
-            <SearchBox />
+            <SearchBox className={"w-[25rem]"} />
           </>
         )}
       </div>
@@ -76,12 +69,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
         ) : (
           <>
             {/* Period Selector - desktop only */}
-            <div className="hidden md:block">
-              <div className="flex items-center border border-gray-200 rounded-lg px-2 py-1 text-sm">
-                <span className="text-secondarytext ml-1">Apr 2023</span>
-                <Calendar className="ml-2 text-primary h-4 w-4" />
-              </div>
-            </div>
+            <PeriodSelect />
 
             {/* Settings Button */}
             <Button

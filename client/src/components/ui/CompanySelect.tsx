@@ -1,81 +1,112 @@
-import { useState, useEffect } from "react";
-import { Building2, ChevronDown } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
-import {
-  setActiveCompany,
-  getAllCompany,
-} from "../../../../store/silce/companySlice";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useState, useRef, useEffect } from "react";
+import { FiChevronDown, FiSearch } from "react-icons/fi";
+import { useAppSelector } from "../../../../store/store";
+import { getAllCompany } from "store/silce/companySlice";
+
+interface Company {
+  _id: string;
+  name: string;
+}
 
 const CompanySelect = () => {
-  const dispatch = useDispatch();
-  const { companies, activeCompany } = useSelector(
-    (state: RootState) => state.company,
-  );
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { companies } = useAppSelector((state) => state.company);
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
 
   useEffect(() => {
-    if (user?.email && !companies.length) {
-      dispatch(getAllCompany(user.email));
+    if (companies.length > 0 && !selectedCompany) {
+      setSelectedCompany(companies[0]);
     }
-  }, [dispatch, user?.email, companies.length]);
+  }, [companies, selectedCompany]);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleCompanySelect = (company: any) => {
-    dispatch(setActiveCompany(company));
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const getFirstLetter = (name: string) => {
+    return name?.charAt(0).toUpperCase();
   };
 
+  const filteredCompanies = companies.filter((company) =>
+    company?.name?.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div className="flex items-center w-[13rem] cursor-pointer hover:text-primary transition-colors">
-          <div className="bg-primary rounded-full h-8 w-8 flex items-center justify-center text-white font-semibold">
-            {activeCompany?.name?.[0] || "M"}
-          </div>
-          <div className="ml-2 flex justify-between items-center">
-            <span className="font-semibold text-primarytext truncate">
-              {(activeCompany?.name || "MrAix Expo").length > 10
-                ? `${(activeCompany?.name || "MrAix Expo").slice(0, 14)}...`
-                : activeCompany?.name || "MrAix Expo"}
+    <div className="relative w-[12rem]" ref={dropdownRef}>
+      <div
+        className="relative group cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="relative flex items-center space-x-2">
+          <div className="flex items-center space-x-2 bg-secondary/5 px-3 py-1.5 rounded-full hover:bg-primary/5 w-full">
+            <div className="w-9 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+              <span className="text-xs font-semibold text-white">
+                {getFirstLetter(selectedCompany?.name)}
+              </span>
+            </div>
+            <span className="text-xs w-full justify-between text-gray-600 truncate ">
+              {selectedCompany?.name || "IHJA"}
             </span>
-            <ChevronDown className="ml-1 h-4 w-4" />
+            <div className="mr-auto">
+              <FiChevronDown
+                className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? "transform rotate-180" : ""}`}
+              />
+            </div>
           </div>
         </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 absolute top-0 max-h-[300px] overflow-y-auto">
-        <DropdownMenuLabel className="sticky top-0 bg-white z-10">
-          Your Companies
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {companies?.map((company: any) => (
-          <DropdownMenuItem
-            key={company.id}
-            className={`flex items-center hover:bg-gray-100 ${company.id === activeCompany?.id ? "bg-gray-50" : ""}`}
-            onClick={() => handleCompanySelect(company)}
-          >
-            <Building2
-              className={`mr-2 h-4 w-4 ${company.id === activeCompany?.id ? "text-primary" : "text-gray-500"}`}
-            />
-            <span className={`text-xs`} title={company.name}>
-              {company.name}
-            </span>
-          </DropdownMenuItem>
-        ))}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => (window.location.href = "/company/create")}
-        >
-          <span className="text-xs text-primary">+ Add New Company</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </div>
+
+      {isOpen && (
+        <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+          <div className="p-2">
+            <div className="relative">
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search companies..."
+                className="w-full pl-9 pr-3 py-2 text-xs border border-gray-200 rounded-md focus:outline-none focus:border-purple-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="max-h-48 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {filteredCompanies.map((company) => (
+              <div
+                key={company._id}
+                className={`flex items-center space-x-2 px-3 py-2 hover:bg-gray-50 cursor-pointer ${selectedCompany?._id === company?._id ? "bg-purple-50" : ""}`}
+                onClick={() => {
+                  setSelectedCompany(company);
+                  setIsOpen(false);
+                  setSearchTerm("");
+                }}
+              >
+                <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                  <span className="text-xs font-semibold text-white">
+                    {getFirstLetter(company?.name)}
+                  </span>
+                </div>
+                <span className="text-xs text-gray-600">{company?.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
