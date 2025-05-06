@@ -44,8 +44,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     (state: RootState) => state.favorites,
   );
   const { user } = useSelector((state: RootState) => state.auth);
-
-  const isMobile = useIsMobile();
   const [expandedMenus, setExpandedMenus] = useState<string[]>(["sales"]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
