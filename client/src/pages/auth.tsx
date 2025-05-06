@@ -48,7 +48,6 @@ export default function AuthPage() {
   };
 
   const handleLogin = async () => {
-    console.log("handleLogin called");
     if (!formData.email || !formData.password) {
       toast.error("Please fill in all required fields.");
       return;
@@ -56,24 +55,53 @@ export default function AuthPage() {
 
     try {
       setIsLoading(true);
-      console.log("Login result:");
-
       const result = await dispatch(
         loginUser({
           identifier: formData.email,
           password: formData.password,
-        }),
+        })
       ).unwrap();
-      console.log("Login result:", result);
 
-      if (result.status) {
-        toast.success("Login successful!");
-        setLocation("/");
-      } else {
-        toast.error(result.message || "Login failed");
-      }
+      toast.success(result.message || "Login successful!");
+      setLocation("/");
     } catch (error: any) {
       toast.error(error || "Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (email: string) => {
+    try {
+      const result = await dispatch(forgotPassword(email)).unwrap();
+      toast.success(result.message || "Password reset instructions sent");
+      setShowForgotPasswordModal(false);
+    } catch (error: any) {
+      toast.error(error || "Failed to process password reset request");
+    }
+  };
+
+  const handleRegister = async () => {
+    if (!formData.email || !formData.password || !formData.name || !formData.phone || !formData.companyName || !acceptTerms) {
+      toast.error("Please fill in all required fields and accept terms.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const result = await dispatch(registerUser({
+        username: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        companyname: formData.companyName,
+        ispartner: false,
+      })).unwrap();
+
+      toast.success(result.message || "Registration successful!");
+      setShowOtpModal(true);
+    } catch (error: any) {
+      toast.error(error || "Registration failed");
     } finally {
       setIsLoading(false);
     }

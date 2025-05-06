@@ -1,6 +1,6 @@
 
 const env = {
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || window.location.origin,
+  API_BASE_URL: 'https://host.mraix.com/api/v2',
   API_TIMEOUT: 15000,
   AUTH_TOKEN_KEY: 'auth_token',
 };

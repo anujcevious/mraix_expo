@@ -131,17 +131,13 @@ export const loginUser = createAsyncThunk(
   "auth/login",
   async (credentials: LoginPayload, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `https://host.mraix.com/api/v2/auth/login
-`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(credentials),
+      const response = await fetch(`${env.API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(credentials),
+      });
       const data = await response.json();
       if (!data.status) {
         return rejectWithValue(data.message || "Login failed");
@@ -154,6 +150,72 @@ export const loginUser = createAsyncThunk(
       return rejectWithValue(error.message || "Login failed");
     }
   },
+);
+
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+  async (email: string, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${env.API_BASE_URL}/auth/forgotpassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      const data = await response.json();
+      if (!data.status) {
+        return rejectWithValue(data.message || "Password reset request failed");
+      }
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Password reset request failed");
+    }
+  }
+);
+
+export const verifyOtp = createAsyncThunk(
+  "auth/verifyOtp",
+  async ({ email, verificationcode }: { email: string, verificationcode: string }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${env.API_BASE_URL}/auth/verify/${email}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ verificationcode }),
+      });
+      const data = await response.json();
+      if (!data.status) {
+        return rejectWithValue(data.message || "OTP verification failed");
+      }
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "OTP verification failed");
+    }
+  }
+);
+
+export const registerUser = createAsyncThunk(
+  "auth/register",
+  async (userData: RegisterInput, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${env.API_BASE_URL}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+      const data = await response.json();
+      if (!data.status) {
+        return rejectWithValue(data.message || "Registration failed");
+      }
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Registration failed");
+    }
+  }
 );
 
 const authSlice = createSlice({
