@@ -49,7 +49,7 @@ export const loginUser = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message || "Login failed");
     }
-  }
+  },
 );
 
 export const forgotPassword = createAsyncThunk(
@@ -71,12 +71,15 @@ export const forgotPassword = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message || "Password reset request failed");
     }
-  }
+  },
 );
 
 export const verifyOtp = createAsyncThunk(
   "auth/verifyOtp",
-  async ({ email, verificationcode }: { email: string; verificationcode: string }, { rejectWithValue }) => {
+  async (
+    { email, verificationcode }: { email: string; verificationcode: string },
+    { rejectWithValue },
+  ) => {
     try {
       const response = await fetch(`${env.API_BASE_URL}/auth/verify/${email}`, {
         method: "POST",
@@ -93,7 +96,7 @@ export const verifyOtp = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message || "OTP verification failed");
     }
-  }
+  },
 );
 
 export const registerUser = createAsyncThunk(
@@ -107,15 +110,15 @@ export const registerUser = createAsyncThunk(
         },
         body: JSON.stringify(userData),
       });
-      const data = await response.json();
-      if (!data.status) {
-        return rejectWithValue(data.message || "Registration failed");
-      }
-      return data;
+      // const data = await response.json();
+      // if (!data.status) {
+      //   return rejectWithValue(data.message || "Registration failed");
+      // }
+      return response;
     } catch (error: any) {
       return rejectWithValue(error.message || "Registration failed");
     }
-  }
+  },
 );
 
 const authSlice = createSlice({
@@ -166,5 +169,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, loginStart, loginSuccess, loginFailure } = authSlice.actions;
+export const { logout, loginStart, loginSuccess, loginFailure } =
+  authSlice.actions;
 export default authSlice.reducer;

@@ -8,6 +8,7 @@ import {
   loginSuccess,
   loginFailure,
   loginUser,
+  registerUser,
 } from "../../../store/silce/auth/authSlice";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import OTPVerificationPopup from "@/components/popups/OTPVerificationPopup";
@@ -59,7 +60,7 @@ export default function AuthPage() {
         loginUser({
           identifier: formData.email,
           password: formData.password,
-        })
+        }),
       ).unwrap();
 
       toast.success(result.message || "Login successful!");
@@ -82,32 +83,43 @@ export default function AuthPage() {
   };
 
   const handleRegister = async () => {
-    if (!formData.email || !formData.password || !formData.name || !formData.phone || !formData.companyName || !acceptTerms) {
+    if (
+      !formData.email ||
+      !formData.password ||
+      !formData.name ||
+      !formData.phone ||
+      !formData.companyName ||
+      !acceptTerms
+    ) {
       toast.error("Please fill in all required fields and accept terms.");
       return;
     }
 
     try {
       setIsLoading(true);
-      const result = await dispatch(registerUser({
-        username: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        password: formData.password,
-        companyname: formData.companyName,
-        ispartner: false,
-      })).unwrap();
+      const result = await dispatch(
+        registerUser({
+          username: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+          companyname: formData.companyName,
+          ispartner: false,
+        }),
+      ).unwrap();
+      console.log(result, "result>>>");
+      if (result.status == 201) {
+        console.log(result, "result>>>");
 
-      toast.success(result.message || "Registration successful!");
-      setShowOtpModal(true);
+        toast.success(result.message || "Registration successful!");
+        setShowOtpModal(true);
+      }
     } catch (error: any) {
       toast.error(error || "Registration failed");
     } finally {
       setIsLoading(false);
     }
   };
-
-  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -131,37 +143,39 @@ export default function AuthPage() {
         isOpen={showForgotPasswordModal}
         onClose={() => setShowForgotPasswordModal(false)}
       /> */}
-      {/* <OTPVerificationPopup
-        email={formData.email}
-        isOpen={showOtpModal}
-        onClose={() => setShowOtpModal(false)}
-        onVerify={async (otp) => {
-          try {
-            const response = await fetch("/api/auth/verify-otp", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: formData.email,
-                verificationcode: otp,
-              }),
-            });
+      {showOtpModal && (
+        <OTPVerificationPopup
+          email={formData.email}
+          isOpen={showOtpModal}
+          onClose={() => setShowOtpModal(false)}
+          onVerify={async (otp) => {
+            try {
+              const response = await fetch("/api/auth/verify-otp", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  email: formData.email,
+                  verificationcode: otp,
+                }),
+              });
 
-            const data = await response.json();
+              const data = await response.json();
 
-            if (data.status) {
-              setShowOtpModal(false);
-              setLocation("/");
-              toast.success("Email verified successfully!");
-            } else {
-              toast.error(data.message || "OTP verification failed");
+              if (data.status) {
+                setShowOtpModal(false);
+                setLocation("/");
+                toast.success("Email verified successfully!");
+              } else {
+                toast.error(data.message || "OTP verification failed");
+              }
+            } catch (error) {
+              toast.error("OTP verification failed");
             }
-          } catch (error) {
-            toast.error("OTP verification failed");
-          }
-        }}
-      /> */}
+          }}
+        />
+      )}
       <div className="flex min-h-screen">
         <div className="hidden md:flex bg-purple-600 p-6 md:p-16 flex-col justify-center">
           <h1 className="text-4xl font-bold text-white mb-4">
