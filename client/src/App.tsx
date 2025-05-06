@@ -4,14 +4,16 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { loginSuccess } from "../../store/silce/auth/authSlice";
 import ProtectedLayout from "@/components/layout/ProtectedLayout";
 import { routes } from "./routes"; // Import the routes array
+import { RootState } from "../../store/store";
 
 function App() {
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
