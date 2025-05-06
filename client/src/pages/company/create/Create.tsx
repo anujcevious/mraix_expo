@@ -6,7 +6,7 @@ import SelectField from "@/components/ui/SelectField";
 import { useLocation } from "wouter";
 import InputField from "@/components/ui/InputField";
 import Button from "@/components/ui/Button";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import Icons from "@/components/ui/Icons";
 import {
   createCompany,
@@ -14,6 +14,7 @@ import {
 } from "../../../../../store/silce/companySlice";
 
 const Create = () => {
+  const { toast } = useToast();
   const [location, setLocation] = useLocation();
   const dispatch = useDispatch();
   const [step, setStep] = useState("business-type");
@@ -187,7 +188,10 @@ const Create = () => {
       }
     } catch (error) {
       console.error("Error creating company:", error);
-      toast.error(error.response?.data?.message || "Failed to create company");
+      toast({
+          variant: "destructive",
+          description: error.response?.data?.message || "Failed to create company"
+        });
     }
   };
 
