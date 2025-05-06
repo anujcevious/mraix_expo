@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/lib/store";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
