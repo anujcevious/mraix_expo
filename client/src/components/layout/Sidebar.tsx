@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store/store";
-import { toggleSidebar, collapseSidebar } from "../../../../store/silce/sidebarSlice";
 import {
-  toggleFavorite,
-} from "../../../../store/silce/favoritesSlice";
+  toggleSidebar,
+  collapseSidebar,
+} from "../../../../store/silce/sidebarSlice";
+import { toggleFavorite } from "../../../../store/silce/favoritesSlice";
 import {
   ChevronRight,
   ChevronLeft,
@@ -18,7 +19,7 @@ import {
   MessageSquare,
   Pin,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import {
   Tooltip,
   TooltipContent,
@@ -38,7 +39,9 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const dispatch = useDispatch();
   const [location] = useLocation();
   const { isExpanded } = useSelector((state: RootState) => state.sidebar);
-  const { items: favorites } = useSelector((state: RootState) => state.favorites);
+  const { items: favorites } = useSelector(
+    (state: RootState) => state.favorites,
+  );
   const { user } = useSelector((state: RootState) => state.auth);
 
   const isMobile = useIsMobile();

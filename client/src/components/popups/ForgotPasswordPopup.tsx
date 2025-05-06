@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import  Button  from '@/components/ui/Button';
 import { Card } from "@/components/ui/card";
 import {
   Form,

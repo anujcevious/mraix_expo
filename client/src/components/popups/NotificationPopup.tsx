@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Bell, FileText, User, Check, CheckCheck, ShoppingCart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import  Button  from '@/components/ui/Button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';

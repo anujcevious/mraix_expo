@@ -1,5 +1,5 @@
 import { X, User, Settings, LogOut, HelpCircle, Mail, Phone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import  Button  from '@/components/ui/Button';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';

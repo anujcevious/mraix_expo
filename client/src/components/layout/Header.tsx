@@ -1,19 +1,12 @@
-
 import { useState } from "react";
-import {
-  Bell,
-  Settings,
-  Search,
-  Calendar,
-  Menu,
-} from "lucide-react";
+import { Bell, Settings, Search, Calendar, Menu } from "lucide-react";
 import CompanySelect from "@/components/ui/CompanySelect";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { logout } from "../../../../store/silce/auth/authSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -91,49 +84,52 @@ const Header = ({ onMenuClick }: HeaderProps) => {
         ) : (
           <>
             {/* Period Selector - desktop only */}
-        <div className="hidden md:block">
-          <div className="flex items-center border border-gray-200 rounded-lg px-2 py-1 text-sm">
-            <span className="text-secondarytext ml-1">Apr 2023</span>
-            <Calendar className="ml-2 text-primary h-4 w-4" />
-          </div>
-        </div>
+            <div className="hidden md:block">
+              <div className="flex items-center border border-gray-200 rounded-lg px-2 py-1 text-sm">
+                <span className="text-secondarytext ml-1">Apr 2023</span>
+                <Calendar className="ml-2 text-primary h-4 w-4" />
+              </div>
+            </div>
 
-        {/* Settings Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-secondarytext hover:text-primary w-10 h-10 rounded-full"
-          onClick={() => (window.location.href = "/settings")}
-        >
-          <Settings className="h-5 w-5" />
-        </Button>
+            {/* Settings Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-secondarytext hover:text-primary w-10 h-10 rounded-full"
+              onClick={() => (window.location.href = "/settings")}
+            >
+              <Settings className="h-5 w-5" />
+            </Button>
 
-        {/* Notifications Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-secondarytext hover:text-primary w-10 h-10 rounded-full relative"
-          onClick={handleToggleNotifications}
-        >
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-2 right-2 h-4 w-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center">
-            3
-          </span>
-        </Button>
+            {/* Notifications Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-secondarytext hover:text-primary w-10 h-10 rounded-full relative"
+              onClick={handleToggleNotifications}
+            >
+              <Bell className="h-5 w-5" />
+              <span className="absolute top-2 right-2 h-4 w-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center">
+                3
+              </span>
+            </Button>
 
-        {/* User Profile Button */}
-        <Button
-          variant="ghost"
-          className="p-0"
-          onClick={handleToggleUserProfile}
-        >
-          <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
-            <AvatarImage src={user?.avatar || ""} alt={user?.name || "User"} />
-            <AvatarFallback className="bg-primary text-white">
-              {user?.name?.charAt(0) || "U"}
-            </AvatarFallback>
-          </Avatar>
-        </Button>
+            {/* User Profile Button */}
+            <Button
+              variant="ghost"
+              className="p-0"
+              onClick={handleToggleUserProfile}
+            >
+              <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
+                <AvatarImage
+                  src={user?.avatar || ""}
+                  alt={user?.name || "User"}
+                />
+                <AvatarFallback className="bg-primary text-white">
+                  {user?.name?.charAt(0) || "U"}
+                </AvatarFallback>
+              </Avatar>
+            </Button>
           </>
         )}
       </div>

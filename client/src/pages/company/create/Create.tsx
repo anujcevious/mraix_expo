@@ -5,7 +5,7 @@ import { Country, State } from "country-state-city";
 import SelectField from "@/components/ui/SelectField";
 import { useLocation } from "wouter";
 import InputField from "@/components/ui/InputField";
-import { Button } from "@/components/ui/Button";
+import Button from "@/components/ui/Button";
 import { toast } from "@/hooks/use-toast";
 import Icons from "@/components/ui/Icons";
 import {
