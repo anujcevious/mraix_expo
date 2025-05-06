@@ -10,12 +10,12 @@ interface HeadingProps {
   items?: { label: string; href: string }[];
 }
 
-export default function Heading({
+const Heading = ({
   title,
   description,
   className,
   items,
-}: HeadingProps) {
+}: HeadingProps) => {
   const { user } = useSelector((state: RootState) => state.auth);
   return (
     <div className="space-y-1">
@@ -31,4 +31,6 @@ export default function Heading({
       {items && <Breadcrumbs items={items} />}
     </div>
   );
-}
+};
+
+export default Heading;
