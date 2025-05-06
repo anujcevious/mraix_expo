@@ -213,7 +213,10 @@ const Create = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("An error occurred. Please try again.");
+      toast({
+        variant: "destructive",
+        description: "An error occurred. Please try again."
+      });
     }
   };
 
