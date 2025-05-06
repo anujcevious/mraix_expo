@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Building2, ChevronDown } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { setActiveCompany } from "../../../../store/silce/companySlice";
+import { setActiveCompany, getAllCompany } from "../../../../store/silce/companySlice";
 import {
   DropdownMenu,
   DropdownMenuContent,
