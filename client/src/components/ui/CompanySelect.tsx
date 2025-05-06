@@ -52,7 +52,7 @@ const CompanySelect = () => {
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => window.location.href = '/company/create'}>
           <span className="text-primary">+ Add New Company</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
