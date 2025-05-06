@@ -17,37 +17,10 @@ interface BreadcrumbItemType {
 
 interface BreadcrumbsProps {
   items?: BreadcrumbItemType[];
-}
-
-export default function Breadcrumbs({ items }: BreadcrumbsProps) {
-  if (!items?.length) return null;
-  
-  return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        {items.map((item, index) => (
-          <BreadcrumbItem key={index}>
-            {item.href ? (
-              <Link href={item.href}>
-                <span className="text-primary">{item.label}</span>
-              </Link>
-            ) : (
-              <BreadcrumbPage>{item.label}</BreadcrumbPage>
-            )}
-            {index < items.length - 1 && <BreadcrumbSeparator />}
-          </BreadcrumbItem>
-        ))}
-      </BreadcrumbList>
-    </Breadcrumb>
-  );
-}
-
-interface BreadcrumbsProps {
-  items: BreadcrumbItem[];
   className?: string;
 }
 
-export const Breadcrumbs = ({ items, className = "" }: BreadcrumbsProps) => {
+export default function Breadcrumbs({ items, className = "" }: BreadcrumbsProps) {
   const [location] = useLocation();
 
   if (!items || items.length === 0) {
@@ -76,9 +49,9 @@ export const Breadcrumbs = ({ items, className = "" }: BreadcrumbsProps) => {
               {!isLast ? (
                 <BreadcrumbLink asChild>
                   <Link href={item.href || "/"}>
-                    <a className="text-primary hover:text-primary/80">
+                    <span className="text-primary hover:text-primary/80">
                       {item.label}
-                    </a>
+                    </span>
                   </Link>
                 </BreadcrumbLink>
               ) : (
@@ -93,6 +66,4 @@ export const Breadcrumbs = ({ items, className = "" }: BreadcrumbsProps) => {
       </BreadcrumbList>
     </Breadcrumb>
   );
-};
-
-export default Breadcrumbs;
+}
