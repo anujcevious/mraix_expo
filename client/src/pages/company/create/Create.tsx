@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Heading } from "@/components/ui/Heading";
 import { Country, State } from "country-state-city";
+import { toast } from 'react-hot-toast';
+import { 
+  businessTypeSchema, 
+  businessDetailsSchema, 
+  representativeSchema, 
+  publicDetailsSchema 
+} from '../../../../shared/companyValidationSchema';
 import SelectField from "@/components/ui/SelectField";
 import { useLocation } from "wouter";
 import InputField from "@/components/ui/InputField";
@@ -92,14 +99,6 @@ const Create = () => {
       [name]: value,
     }));
   };
-
-  import { 
-    businessTypeSchema, 
-    businessDetailsSchema, 
-    representativeSchema, 
-    publicDetailsSchema 
-  } from '../../../../shared/companyValidationSchema';
-  import { toast } from 'react-hot-toast';
 
   const validateStep = (currentStep: string) => {
     try {
