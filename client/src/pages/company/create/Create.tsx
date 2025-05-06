@@ -160,30 +160,23 @@ const Create = () => {
 
       if (step === "review") {
         const apiData = {
-          name: "Company Name rthykt45r",
-          email: "anujkumar@cevious.com",
-          businesslocation: "AX",
-          typeofbusiness: "sole-proprietor",
-          legalbusinessname: "Company Name rthykr",
-          gstRegistrationType: "Regular",
-          panno: "",
-          tanno: "PDES03028F",
-          gstidentificationnumber: "",
-          companyidentificationnumber: "",
-          payment: {
-            isinternationalpayment: true,
-            transactioncode: "TEST123",
-            iswebsite: true,
-            isapp: false,
-            isoffline: true,
-          },
+          name: formData.companyName,
+          email: formData.email,
+          businesslocation: formData.businessLocation,
+          typeofbusiness: formData.typeOfBusiness,
+          legalbusinessname: formData.legalBusinessName,
+          gstRegistrationType: formData.gstRegistrationType,
+          panno: formData.businessPAN,
+          tanno: formData.businessTAN,
+          gstidentificationnumber: formData.gstNumber,
+          companyidentificationnumber: formData.companyIdentificationNumber,
           registeredbusinessaddresses: [
             {
-              address: "A-21",
-              city: "Patna",
-              postalcode: "6534563443",
-              state: "AS",
-              country: "IN",
+              address: formData.address,
+              city: formData.city,
+              postalcode: formData.pincode,
+              state: formData.state,
+              country: formData.country,
               isdefaultaddress: true,
               action: {
                 isactive: true,
@@ -193,67 +186,34 @@ const Create = () => {
             },
           ],
           businessrepresentative: {
-            firstname: "Representative",
-            lastname: "Name *ew",
-            emailaddress: "",
-            jobtitle: "",
-            address: "",
-            dob: "",
-            phonenumber: "",
-            pan: "",
-            ownerShipPercentage: "",
+            firstname: formData.representativeName,
+            emailaddress: formData.email,
+            jobtitle: formData.position,
+            phonenumber: formData.phone,
+            pan: formData.representativePAN,
           },
           publicdetailsforcustomers: {
-            statementdescription: "yr",
-            shorteneddescriptor: "yr",
-            customersupportphonenumber: "",
+            statementdescription: formData.description,
+            customersupportphonenumber: formData.supportPhone,
           },
-          generalsetting: {
-            gstRegistration: true,
-            gstClassification: true,
-            createAutoid: false,
-            DateFormat: null,
-            TimeFormat: null,
-            discountViaPercentage: null,
-            language: "English",
-            timezone: null,
-            currency: null,
-            autoBilling: null,
-            decimalPlace: 2,
-          },
-          region: [
-            {
-              country: "IN",
-              countrycode: "CC",
-              currency: "USD",
-              default: true,
-              action: {
-                isactive: true,
-                isdelete: false,
-                ismodify: true,
-              },
-            },
-          ],
         };
 
-        const res = await dispatch(createCompany(apiData)).unwrap();
-        console.log();
-        toast.success(res, "res");
-        if (res?.status === 200) {
-          toast.success("Information saved successfully");
-          toast.success(res, "res");
+        try {
+          const res = await dispatch(createCompany(apiData)).unwrap();
+          if (res?.status === 200) {
+            toast.success("Company created successfully");
+            setLocation("/");
+          }
+        } catch (error) {
+          toast.error("Failed to create company. Please try again.");
         }
       } else {
         dispatch(updateCompanyData(formData));
-        toast.success("Information saved successfully");
         goToNextStep();
       }
     } catch (error) {
-      console.error("Error creating company:", error);
-      toast({
-          variant: "destructive",
-          description: error.response?.data?.message || "Failed to create company"
-        });
+      console.error("Error:", error);
+      toast.error("An error occurred. Please try again.");
     }
   };
 
