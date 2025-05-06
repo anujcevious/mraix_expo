@@ -8,7 +8,10 @@ import InputField from "@/components/ui/InputField";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import Icons from "@/components/ui/Icons";
-import { createCompany, updateCompanyData } from "../../../../../store/silce/companySlice";
+import {
+  createCompany,
+  updateCompanyData,
+} from "../../../../../store/silce/companySlice";
 
 const Create = () => {
   const [location, setLocation] = useLocation();
@@ -93,57 +96,6 @@ const Create = () => {
     e.preventDefault();
     try {
       if (step === "review") {
-        // const apiData = {
-        //   name: formData.companyName,
-        //   email: formData.email,
-        //   businesslocation: formData.businessLocation,
-        //   typeofbusiness: formData.typeOfBusiness,
-        //   legalbusinessname: formData.companyName,
-        //   gstRegistrationType: formData.gstRegistrationType,
-        //   panno: formData.panNumber,
-        //   tanno: formData.businessTAN,
-        //   gstidentificationnumber: formData.gstIN,
-        //   companyidentificationnumber: formData.companyIdentificationNumber,
-        //   payment: {
-        //     isinternationalpayment: true,
-        //     transactioncode: "TEST123",
-        //     iswebsite: true,
-        //     isapp: false,
-        //     isoffline: true,
-        //   },
-        //   registeredbusinessaddresses: [
-        //     {
-        //       address: formData.address,
-        //       city: formData.city,
-        //       postalcode: formData.pincode,
-        //       state: formData.state,
-        //       country: formData.country,
-        //       isdefaultaddress: true,
-        //       action: {
-        //         isactive: true,
-        //         isdelete: false,
-        //         ismodify: true,
-        //       },
-        //     },
-        //   ],
-        //   businessrepresentative: {
-        //     firstname: formData.representativeName?.split(" ")[0] || "",
-        //     lastname:
-        //       formData.representativeName?.split(" ").slice(1).join(" ") || "",
-        //     emailaddress: formData.representativeEmail,
-        //     jobtitle: formData.representativeJobTitle,
-        //     address: formData.representativeAddress,
-        //     dob: formData.representativeDOB,
-        //     phonenumber: formData.representativePhone,
-        //     pan: formData.representativePAN,
-        //     ownerShipPercentage: formData.representativeOwnership,
-        //   },
-        //   publicdetailsforcustomers: {
-        //     statementdescription: formData.description,
-        //     shorteneddescriptor: formData.description?.substring(0, 20),
-        //     customersupportphonenumber: formData.supportPhone,
-        //   },
-        // };
         const apiData = {
           name: "Company Name rthykt45r",
           email: "anujkumar@cevious.com",

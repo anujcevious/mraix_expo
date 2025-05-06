@@ -10,6 +10,8 @@ import { loginSuccess } from "../../store/silce/auth/authSlice";
 import ProtectedLayout from "@/components/layout/ProtectedLayout";
 import { routes } from "./routes"; // Import the routes array
 import { RootState } from "../../store/store";
+import Demo from "./Demo";
+import Create from "./pages/company/create/Create";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,35 +30,39 @@ function App() {
           lastLogin: new Date().toISOString(),
           avatar: "",
         },
-        token: token
+        token: token,
       };
       dispatch(loginSuccess(mockUser));
     }
   }, [dispatch]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="light">
-        <TooltipProvider>
-          <Toaster />
-          <Switch>
-            {routes.map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                component={() =>
-                  route.protected ? (
-                    <ProtectedLayout>{route.component}</ProtectedLayout>
-                  ) : (
-                    route.component
-                  )
-                }
-              />
-            ))}
-          </Switch>
-        </TooltipProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <>
+      <Create />
+
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <TooltipProvider>
+            <Toaster />
+            <Switch>
+              {routes.map((route) => (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  component={() =>
+                    route.protected ? (
+                      <ProtectedLayout>{route.component}</ProtectedLayout>
+                    ) : (
+                      route.component
+                    )
+                  }
+                />
+              ))}
+            </Switch>
+          </TooltipProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </>
   );
 }
 
