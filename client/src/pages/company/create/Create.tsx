@@ -8,7 +8,7 @@ import {
   businessDetailsSchema, 
   representativeSchema, 
   publicDetailsSchema 
-} from '../../../../shared/companyValidationSchema';
+} from '../../../../../shared/companyValidationSchema';
 import SelectField from "@/components/ui/SelectField";
 import { useLocation } from "wouter";
 import InputField from "@/components/ui/InputField";
