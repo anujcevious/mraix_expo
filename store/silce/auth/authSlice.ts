@@ -1,9 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-interface LoginPayload {
-  identifier: string;
-  password: string;
-}
+import { env } from "@/config/env";
+import { LoginInput, RegisterInput } from "../../../shared/authSchema";
 
 interface AuthState {
   user: {
@@ -30,106 +27,9 @@ const initialState: AuthState = {
   error: null,
 };
 
-export const registerUser = createAsyncThunk(
-  "auth/register",
-  async (credentials: any) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      },
-    );
-    // const data = await response.json();
-    // if (!data.status) {
-    //   throw new Error(data.message || "Registration failed");
-    // }
-    return response;
-  },
-);
-
-export const forgotPassword = createAsyncThunk(
-  "auth/forgotPassword",
-  async (email: string) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/forgotpassword`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      },
-    );
-    return response;
-  },
-);
-
-export const verifyResetPassword = createAsyncThunk(
-  "auth/verifyResetPassword",
-  async ({
-    email,
-    password,
-    confirmpassword,
-  }: {
-    email: string;
-    password: string;
-    confirmpassword: string;
-  }) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/verifyforgotpassword`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password, confirmpassword }),
-      },
-    );
-    // const data = await response.json();
-    // if (!data.status) {
-    //   throw new Error(data.message || "Password reset failed");
-    // }
-    return response;
-  },
-);
-
-export const verifyOtp = createAsyncThunk(
-  "auth/verify",
-  async ({
-    email,
-    verificationcode,
-  }: {
-    email: string;
-    verificationcode: string;
-  }) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/verify`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, verificationcode }),
-      },
-    );
-    const data = await response.json();
-    if (!data.status) {
-      throw new Error(data.message || "OTP verification failed");
-    }
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-    }
-    return data;
-  },
-);
-
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async (credentials: LoginPayload, { rejectWithValue }) => {
+  async (credentials: LoginInput, { rejectWithValue }) => {
     try {
       const response = await fetch(`${env.API_BASE_URL}/auth/login`, {
         method: "POST",
@@ -149,7 +49,7 @@ export const loginUser = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message || "Login failed");
     }
-  },
+  }
 );
 
 export const forgotPassword = createAsyncThunk(
@@ -176,7 +76,7 @@ export const forgotPassword = createAsyncThunk(
 
 export const verifyOtp = createAsyncThunk(
   "auth/verifyOtp",
-  async ({ email, verificationcode }: { email: string, verificationcode: string }, { rejectWithValue }) => {
+  async ({ email, verificationcode }: { email: string; verificationcode: string }, { rejectWithValue }) => {
     try {
       const response = await fetch(`${env.API_BASE_URL}/auth/verify/${email}`, {
         method: "POST",
@@ -266,6 +166,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, loginStart, loginSuccess, loginFailure } =
-  authSlice.actions;
+export const { logout, loginStart, loginSuccess, loginFailure } = authSlice.actions;
 export default authSlice.reducer;
