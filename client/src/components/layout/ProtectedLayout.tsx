@@ -73,15 +73,15 @@ export default function ClientLayout({
 
             {/* Sidebar */}
             <div
-              className={`fixed bg-white ${isMobile && "top-0 z-40"} left-0 transition-transform duration-300 ease-in-out ${
+              className={`fixed bg-white ${isMobile ? "top-0 z-40 h-full" : "h-[90vh]"} left-0 transition-transform duration-300 ease-in-out ${
                 isMobile
-                  ? `w-[80%] h-full transform ${
+                  ? `w-[80%] transform ${
                       isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                     }`
-                  : `${!isExpanded ? "w-[5%] " : "w-[20%]"} h-[90vh]`
+                  : `${!isExpanded ? "w-[5%]" : "w-[20%]"}`
               }`}
             >
-              <Sidebar isMobile={isMobile} isSidebarOpen={isSidebarOpen} />
+              <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
             </div>
 
             {/* Main content */}

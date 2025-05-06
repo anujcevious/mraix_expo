@@ -36,6 +36,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+  const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const [location] = useLocation();
   const { isExpanded } = useSelector((state: RootState) => state.sidebar);
