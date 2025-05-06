@@ -32,9 +32,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const isMobile = useIsMobile();
   const dispatch = useDispatch();
   const [location] = useLocation();
-  // const { isExpanded } = useSelector((state: RootState) => state.sidebar);
-  const isExpanded = true;
-  console.log(isExpanded, "isExpanded");
+  const isExpanded = useSelector((state: RootState) => state.globalSetting.isExpanded);
   const { items: favorites } = useSelector(
     (state: RootState) => state.favorites,
   );
@@ -53,9 +51,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   }, [isMobile, dispatch]);
 
   const handleToggleSidebar = () => {
-    if (isMobile) {
-      setIsMobileOpen(!isMobileOpen);
-    } else {
+    if (!isMobile) {
       dispatch(toggleSidebar());
     }
   };
