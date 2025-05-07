@@ -1,4 +1,3 @@
-
 import { createSlice } from '@reduxjs/toolkit';
 
 interface SidebarState {
@@ -6,7 +5,7 @@ interface SidebarState {
 }
 
 const initialState: SidebarState = {
-  isExpanded: true,
+  isExpanded: true // Default to expanded on desktop
 };
 
 export const sidebarSlice = createSlice({
@@ -16,11 +15,15 @@ export const sidebarSlice = createSlice({
     toggleSidebar: (state) => {
       state.isExpanded = !state.isExpanded;
     },
+    expandSidebar: (state) => {
+      state.isExpanded = true;
+    },
     collapseSidebar: (state) => {
       state.isExpanded = false;
-    },
-  },
+    }
+  }
 });
 
-export const { toggleSidebar, collapseSidebar } = sidebarSlice.actions;
+export const { toggleSidebar, expandSidebar, collapseSidebar } = sidebarSlice.actions;
+
 export default sidebarSlice.reducer;

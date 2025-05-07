@@ -119,7 +119,6 @@ const FormControl = React.forwardRef<
           : `${formDescriptionId} ${formMessageId}`
       }
       aria-invalid={!!error}
-      className="focus:outline-none"
       {...props}
     />
   )

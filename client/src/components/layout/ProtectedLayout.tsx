@@ -1,102 +1,42 @@
-"use client";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "wouter";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { useAppSelector } from "../../../../store/silce/hooks";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../store/store";
-import { fetchUserByEmail, getAllCompany } from "../../../../store/silce/companySlice";
+import Footer from "./Footer";
 
-export default function ClientLayout({
-  children,
-}: {
+interface ProtectedLayoutProps {
   children: React.ReactNode;
-}) {
-  const dispatch = useDispatch<AppDispatch>();
-  const [pathname] = useLocation();
+}
 
-  const isExpanded = useAppSelector((state) => state.globalSetting.isExpanded);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const isAuthPage = pathname.startsWith("/auth");
+const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
+  const [, setLocation] = useLocation();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setIsSidebarOpen(true);
-      } else {
-        setIsSidebarOpen(false);
-      }
-    };
+    if (!isAuthenticated) {
+      setLocation("/auth");
+    }
+  }, [isAuthenticated, setLocation]);
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  useEffect(() => {
-    dispatch(fetchUserByEmail("anujkumar@cevious.com"));
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getAllCompany("anujkumar@cevious.com"));
-  }, [dispatch]);
-
-  // Don't show layout for company create page
-  if (pathname === "/company/create") {
-    return <>{children}</>;
+  if (!isAuthenticated) {
+    return null;
   }
 
   return (
-    <>
-      {isAuthPage ? (
-        children
-      ) : (
-        <div className="relative h-[100vh]">
-          <div className="fixed bg-white my-auto border-b border-b-slate-200 h-[10vh] top-0 w-[100%]  z-20">
-            <Header onMenuClick={toggleSidebar} isMobile={isMobile} />
-          </div>
-          <div className="flex mt-[10vh] h-[90vh]">
-            {/* Overlay for mobile */}
-            {isMobile && isSidebarOpen && (
-              <div
-                className="fixed inset-0 bg-black/50 z-30"
-                onClick={() => setIsSidebarOpen(false)}
-              />
-            )}
-
-            {/* Sidebar */}
-            <div
-              className={`fixed bg-white ${isMobile ? "top-0 z-40 h-full" : "h-[90vh]"} left-0 transition-transform duration-300 ease-in-out ${
-                isMobile
-                  ? `w-[80%] transform ${
-                      isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                    }`
-                  : `${!isExpanded ? "w-[5%]" : "w-[20%]"}`
-              }`}
-            >
-              <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-            </div>
-
-            {/* Main content */}
-            <main
-              className={`transition-all duration-300 ease-in-out ${
-                isMobile
-                  ? "w-full p-4"
-                  : `${isExpanded ? "w-[80%] ml-[20%]" : "w-[95%] ml-[5%]"} "m-auto p-5 bg-green-200"`
-              }`}
-            >
-              {children}
-            </main>
-          </div>
-        </div>
-      )}
-    </>
+    <div className="flex flex-col h-screen overflow-hidden">
+      <Header />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-5">
+          {children}
+        </main>
+      </div>
+      {/* <Footer />
+       */}
+    </div>
   );
-}
+};
+
+export default ProtectedLayout;

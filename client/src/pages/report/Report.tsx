@@ -8,7 +8,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import  Button  from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 
 // Define report types for the grid
 const reports = [
